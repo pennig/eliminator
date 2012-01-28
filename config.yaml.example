@@ -1,0 +1,10 @@
+db:
+    host: "localhost"
+    user: "root"
+    password: ""
+    database: "eliminator"
+legacy_db:
+    host: "localhost"
+    user: "root"
+    password: ""
+    database: "legacy_eliminator"
