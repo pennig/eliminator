@@ -3,7 +3,13 @@ require_relative 'db/model.rb'
 require_relative '../db/connect.rb'
 require_relative '../db/model.rb'
 
+puts "Building team data..."
+require_relative "team_migration.rb"
+puts "Done!"
+puts ""
+
 puts "Migrating users..."
+Users.truncate
 $db_connection.run "ALTER TABLE users MODIFY COLUMN id INT UNSIGNED NOT NULL"
 $db_connection.alter_table(:users) do
     drop_constraint(:PRIMARY,:type => :primary_key)
@@ -31,12 +37,19 @@ LegacyUsers.order(:userid).each do |legacy_user|
         :email => legacy_user.email,
         :active => active
     )
+    favorite_team = Teams.first(:name => legacy_user.favteam)
+    if not favorite_team.nil?
+        favorite_team = favorite_team.id
+    else
+        favorite_team = nil
+    end
 
     UserInfo.create(
         :user_id => user.id,
         :token => nil,
         :time_zone => legacy_user.timezone,
-        :email_reminder => legacy_user.emailreminder
+        :email_reminder => legacy_user.emailreminder,
+        :favorite_team_id => favorite_team
     )
     rescue Sequel::DatabaseError => e
         puts e
@@ -51,16 +64,12 @@ $db_connection.run "ALTER TABLE users AUTO_INCREMENT=#{LegacyUsers.order(:userid
 puts "Done!"
 puts ""
 
-puts "Migrating teams..."
-LegacyTeams.order(:teamid).each do |legacy_team|
-    Teams.create(
-        :name => legacy_team.name
-    )
-end
-puts "Done!"
-puts ""
-
 puts "Migrating schedule, stats, results, and spread..."
+Schedule.truncate
+GameResults.truncate
+GameStats.truncate
+Spread.truncate
+
 LegacyScheduleAndStats.each do |legacy_schedule|
 
     generated_game_id = (legacy_schedule.home+10).to_s+(legacy_schedule.opponent+10).to_s+(legacy_schedule.week+10).to_s+legacy_schedule.season.to_s
@@ -211,6 +220,8 @@ puts "Done!"
 puts ""
 
 puts "Creating default bet sets..."
+BetSets.truncate
+
 Users.each do |user|
     BetSets.create(
         :user_id => user.id,
@@ -225,6 +236,8 @@ puts "Done!"
 puts ""
 
 puts "Migrating bets..."
+Bets.truncate
+
 LegacyBets.each do |legacy_bet|
     legacy_schedule = LegacyScheduleAndStats.with_sql("SELECT * FROM league WHERE season = :season AND week = :week AND (opponent = :team OR home = :team)", :season=>legacy_bet.season, :week => legacy_bet.week, :team => legacy_bet.teamid)
 
@@ -275,14 +288,14 @@ Users.each do |user|
         if record[:won]+record[:lost] == 0
             #ignore it
         elsif record[:won] > record[:lost] or record[:won] - record[:lost] > -2 or record[:won] + record[:lost] < 8
-            puts "not reverse, final record was #{record[:won]}-#{record[:lost]} for #{user.id} in season #{season}"
+            #puts "not reverse, final record was #{record[:won]}-#{record[:lost]} for #{user.id} in season #{season}"
         else
             #almost certainly reverse!
             puts "REVERSE, final record was #{record[:won]}-#{record[:lost]} for #{user.id} in season #{season}"
-            puts ""
             bet_set =BetSets.where(:user_id => user.id, :survival_pickem => 0, :headsup_ats => 0, :regular_reverse => 1).first
             #create a new bet_set
             if bet_set.nil?
+                puts "Creating reverse bet set"
                 bet_set = BetSets.create(
                     :user_id => user.id,
                     :group_id => nil,
@@ -291,11 +304,15 @@ Users.each do |user|
                     :regular_reverse => 1,
                     :created_at => Time.now
                 )
+            else
+                puts "Reverse bet set already created"
             end
             Bets.where(:user_id => user.id).filter(:bets__season => season).each do |bet|
                 bet.bet_set_id = bet_set.id
+                bet.regular_reverse = 1
                 bet.save
             end
+            puts ""
         end
     end
 end

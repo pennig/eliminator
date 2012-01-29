@@ -4,7 +4,7 @@ require 'yaml'
 config = YAML::load(File.open("config.yaml"))
 
 $db_connection = Sequel.connect(
-    :adapter => "mysql",
+    :adapter => "mysql2",
     :host => config["db"]["host"],
     :user => config["db"]["user"],
     :password => config["db"]["password"],
