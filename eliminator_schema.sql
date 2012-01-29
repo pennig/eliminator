@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.18)
 # Database: eliminator
-# Generation Time: 2012-01-28 03:27:18 +0000
+# Generation Time: 2012-01-29 23:28:42 +0000
 # ************************************************************
 
 
@@ -271,7 +271,10 @@ CREATE TABLE `teams` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `short_name` varchar(3) DEFAULT NULL,
-  `stadium` varchar(255) DEFAULT NULL,
+  `stadium_name` varchar(255) DEFAULT NULL,
+  `stadium_capacity` int(11) DEFAULT NULL,
+  `conference` varchar(255) NOT NULL DEFAULT '',
+  `division` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -288,6 +291,8 @@ CREATE TABLE `user_info` (
   `token` varchar(255) DEFAULT NULL,
   `time_zone` varchar(255) DEFAULT NULL,
   `email_reminder` tinyint(1) NOT NULL,
+  `favorite_team_id` tinyint(4) DEFAULT NULL,
+  `hated_team_id` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -300,13 +305,14 @@ CREATE TABLE `user_info` (
 DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `created_at` datetime DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `old_password` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `active` tinyint(1) NOT NULL
+  `active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
