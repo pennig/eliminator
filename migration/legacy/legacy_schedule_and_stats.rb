@@ -33,7 +33,7 @@ LegacyScheduleAndStats.each do |legacy_schedule|
     elsif legacy_schedule.homescore < legacy_schedule.oppscore
         winning_team_id = schedule.away_team_id
     else
-        winning_team_id = 0
+        winning_team_id = nil
     end
 
     #puts "Migrating game results #{generated_game_id}..."

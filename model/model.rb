@@ -44,7 +44,7 @@ class Team < Sequel::Model(:teams)
         {
             :won => game_data.where(:winning_team_id => self.id).count,
             :lost => game_data.where(~:winning_team_id => self.id).where(~:winning_team_id => 0).count,
-            :tied => game_data.where(:winning_team_id => 0).count
+            :tied => game_data.where(:winning_team_id => nil).count
         }
     end
 
