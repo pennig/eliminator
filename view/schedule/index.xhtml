@@ -1,5 +1,11 @@
 <table>
+    <tr><th>Home Team</th><th>Score</th><th>Away Team</th><th>Score</th></tr>
     <?r @schedule.each do |week| ?>
-    <tr><td>#{week.week_number} #{week.home_team_id} #{week.away_team_id}</td></tr>
+    <tr>
+        <td <?r if week.results.home_score > week.results.away_score ?>style="font-weight:bold" <?r end ?>>#{week.home_team.name}</td>
+        <td>#{week.results.home_score}</td>
+        <td>#{week.away_team.name}</td>
+        <td>#{week.results.away_score}</td>
+    </tr>
     <?r end ?>
 </table>
