@@ -4,3 +4,6 @@
 
 # Here go your requires for models:
 require __DIR__('model')
+require __DIR__('team')
+require __DIR__('schedule')
+require __DIR__('user')
