@@ -9,8 +9,6 @@
 #
 # this will force the controller to be mounted on: /otherurl.
 class MainController < Controller
-    helper :user
-
     # the index action is called automatically when no other action is specified
     def index
         if logged_in?

@@ -1,5 +1,5 @@
 class UserController < Controller
-    helper :user, :blue_form
+    helper :blue_form
 
     def login
         @title = "Login"
