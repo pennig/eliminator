@@ -64,20 +64,20 @@ class User < Sequel::Model(:users)
     end
 
     def self.authenticate(hash)
-        if hash["user"].nil? or hash["pass"].nil?
-            raise ArgumentError, "User/pass cannot be nil"
+        if hash["username"].nil? or hash["password"].nil?
+            raise ArgumentError, "Username/password cannot be nil"
         end
-        user = User.where(:username => hash["user"]).first
+        user = User.where(:username => hash["username"]).first
         if user.nil?
             raise StandardError, "No such user found"
         end
 
         if not user.old_password.nil?
-            if check_old_password(user,hash["pass"])
+            if check_old_password(user,hash["password"])
                 return user
             end
         else
-            if user.password == hash["pass"]
+            if user.password == hash["password"]
                 return user
             end
         end
