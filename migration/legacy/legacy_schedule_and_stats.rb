@@ -1,10 +1,9 @@
-require_relative 'db/connect.rb'
-require_relative 'db/model.rb'
-require_relative '../../db/connect.rb'
-require_relative '../../db/model.rb'
+require_relative '../../model/connect.rb'
+require_relative '../../model/model.rb'
+require_relative '../../model/legacy_model.rb'
 
 Schedule.truncate
-GameResults.truncate
+GameResult.truncate
 GameStats.truncate
 Spread.truncate
 
@@ -38,7 +37,7 @@ LegacyScheduleAndStats.each do |legacy_schedule|
     end
 
     #puts "Migrating game results #{generated_game_id}..."
-    game_results = GameResults.create(
+    game_results = GameResult.create(
         :game_id => generated_game_id,
         :home_score => legacy_schedule.homescore,
         :away_score => legacy_schedule.oppscore,

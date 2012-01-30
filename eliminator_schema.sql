@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.18)
 # Database: eliminator
-# Generation Time: 2012-01-29 23:28:42 +0000
+# Generation Time: 2012-01-30 16:32:57 +0000
 # ************************************************************
 
 
@@ -309,7 +309,7 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT NULL,
   `username` varchar(255) DEFAULT NULL,
   `old_password` varchar(255) DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL,
+  `passwd` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)

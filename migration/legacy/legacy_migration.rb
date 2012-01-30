@@ -1,7 +1,6 @@
-require_relative 'db/connect.rb'
-require_relative 'db/model.rb'
-require_relative '../../db/connect.rb'
-require_relative '../../db/model.rb'
+require_relative '../../model/connect.rb'
+require_relative '../../model/model.rb'
+require_relative '../../model/legacy_model.rb'
 
 puts "Building team data..."
 require_relative "../team_migration.rb"
@@ -19,10 +18,10 @@ puts "Done!"
 puts ""
 
 puts "Creating default bet sets..."
-BetSets.truncate
+BetSet.truncate
 
-Users.each do |user|
-    BetSets.create(
+User.each do |user|
+    BetSet.create(
         :user_id => user.id,
         :group_id => nil,
         :survival_pickem => 0,
@@ -35,7 +34,7 @@ puts "Done!"
 puts ""
 
 puts "Migrating bets..."
-Bets.truncate
+Bet.truncate
 
 LegacyBets.each do |legacy_bet|
     legacy_schedule = LegacyScheduleAndStats.with_sql("SELECT * FROM league WHERE season = :season AND week = :week AND (opponent = :team OR home = :team)", :season=>legacy_bet.season, :week => legacy_bet.week, :team => legacy_bet.teamid)
@@ -46,10 +45,10 @@ LegacyBets.each do |legacy_bet|
 
     spread = Spread.where(:game_id => generated_game_id).first
 
-    bet_set = BetSets.where(:user_id => legacy_bet.userid).first
+    bet_set = BetSet.where(:user_id => legacy_bet.userid).first
 
     #puts "Migrating bet #{legacy_bet.userid}..."
-    bet = Bets.create(
+    bet = Bet.create(
         :created_at => legacy_bet.time,
         :updated_at => legacy_bet.time,
         :user_id => legacy_bet.userid,
@@ -69,8 +68,8 @@ puts "Done!"
 puts ""
 
 puts "Trying to determine which users were probably attempting reverse..."
-Users.each do |user|
-    bets = Bets.where(:user_id => user.id).join(:game_results, :game_id => :game_id)
+User.each do |user|
+    bets = Bet.where(:user_id => user.id).join(:game_results, :game_id => :game_id)
     (2004..2011).each do |season|
         record = { :won => 0, :lost => 0 }
         bets.filter(:bets__season => season).each do |bet|
@@ -91,11 +90,11 @@ Users.each do |user|
         else
             #almost certainly reverse!
             puts "REVERSE, final record was #{record[:won]}-#{record[:lost]} for #{user.id} in season #{season}"
-            bet_set =BetSets.where(:user_id => user.id, :survival_pickem => 0, :headsup_ats => 0, :regular_reverse => 1).first
+            bet_set =BetSet.where(:user_id => user.id, :survival_pickem => 0, :headsup_ats => 0, :regular_reverse => 1).first
             #create a new bet_set
             if bet_set.nil?
                 puts "Creating reverse bet set"
-                bet_set = BetSets.create(
+                bet_set = BetSet.create(
                     :user_id => user.id,
                     :group_id => nil,
                     :survival_pickem => 0,
@@ -106,7 +105,7 @@ Users.each do |user|
             else
                 puts "Reverse bet set already created"
             end
-            Bets.where(:user_id => user.id).filter(:bets__season => season).each do |bet|
+            Bet.where(:user_id => user.id).filter(:bets__season => season).each do |bet|
                 bet.bet_set_id = bet_set.id
                 bet.regular_reverse = 1
                 bet.save
