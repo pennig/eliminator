@@ -29,11 +29,11 @@
                                     Documentation
                                 </a>
                             </li>
-                            <li>
-                                <a href="https://groups.google.com/forum/#!forum/ramaze">
-                                    Mailing List
-                                </a>
-                            </li>
+                            <?r if logged_in? ?>
+                            <li><a href="/user/logout">Logout</a></li>
+                            <?r else ?>
+                            <li><a href="/user/login">Login</a></li>
+                            <?r end ?>
                         </ul>
                     </nav>
                 </div>
