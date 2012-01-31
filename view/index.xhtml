@@ -3,13 +3,13 @@
 <p>My Groups</p>
 <ul>
     <?r user.owned_groups.each do |group| ?>
-    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <li><a href="/group/view/#{group.id}">#{group.name}</a></li>
     <?r end ?>
 </ul>
 <p>Joined Groups</p>
 <ul>
     <?r user.joined_groups.each do |group| ?>
-    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <li><a href="/group/view/#{group.id}">#{group.name}</a></li>
     <?r end ?>
 </ul>
 <?r end ?>
