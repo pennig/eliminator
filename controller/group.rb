@@ -41,13 +41,13 @@ class GroupController < Controller
         @title = "Group Search"
         @searched = request.params.size > 0
         @terms = OpenStruct.new({:name => request[:name]})
-        @results = Group.where(:name.like("%#{request[:name]}%"))
+        @results = Group.where(:name.like("%#{request[:name]}%")).where(:visible => true)
     end
 
     def join(group_id)
         login_required
         group = Group[group_id]
-        group.add_member(user.id) unless group.is_member?(user.id)
+        group.add_member(user.id) if group.public and not group.is_member?(user.id)
         redirect GroupController.r(:view, group_id)
     end
 

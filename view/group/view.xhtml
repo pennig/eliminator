@@ -3,11 +3,11 @@
 <p>Owner: #{@group.owner.username}</p>
 
 <?r if logged_in? ?>
-<?r if not @group.is_member?(user.id) ?>
-<p><a href="/group/join/#{@group.id}">Join</a></p>
-<?r else ?>
-<p><a href="/group/leave/#{@group.id}">Leave</a></p>
-<?r end ?>
+    <?r if @group.is_member?(user.id) ?>
+        <p><a href="/group/leave/#{@group.id}">Leave</a></p>
+    <?r elsif @group.public ?>
+        <p><a href="/group/join/#{@group.id}">Join</a></p>
+    <?r end ?>
 <?r end ?>
 
 <p>Group Attributes:</p>
