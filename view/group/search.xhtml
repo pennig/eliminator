@@ -1,0 +1,16 @@
+#{form_for(@terms, :method => :get) do |f|
+    f.input_text "Name", :name, :tabindex => 1
+    f.input_submit "Search"
+end}
+
+<?r if @searched ?>
+<?r if @results.count > 0 ?>
+<ul>
+    <?r @results.each do |group| ?>
+    <li><a href="/group/view/#{group.id}">#{group.name}</a></li>
+    <?r end ?>
+</ul>
+<?r else ?>
+<p><em>No groups found</em></p>
+<?r end ?>
+<?r end ?>

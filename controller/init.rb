@@ -7,6 +7,11 @@ class Controller < Ramaze::Controller
     layout :default
     helper :xhtml
     engine :etanni
+    helper :stack
+
+    def login_required
+        call UserController.r(:login) unless logged_in?
+    end
 end
 
 # Here you can require all your other controllers. Note that if you have multiple
