@@ -1,3 +1,9 @@
+fieldset {
+    border: 1px solid #CCCCCC;
+    padding: 1em;
+    margin: 1em;
+}
+
 /**
  * Stylesheet used for the layout of most elements.
  *

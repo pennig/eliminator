@@ -2,12 +2,18 @@
     f.input_text "Name", :name, :tabindex => 1
     f.input_checkbox "Public", :public, @group.public || nil, :show_value => false
     f.input_checkbox "Visible", :visible, @group.visible || nil, :show_value => false
-    f.input_checkbox "Pickem Allowed", :pickem_allowed, @group.pickem_allowed || nil, :show_value => false
-    f.input_checkbox "Survival Allowed", :survival_allowed, @group.survival_allowed || nil, :show_value => false
-    f.input_checkbox "Heads Up Allowed", :headsup_allowed, @group.headsup_allowed || nil, :show_value => false
-    f.input_checkbox "Against The Spread Allowed", :ats_allowed, @group.ats_allowed || nil, :show_value => false
-    f.input_checkbox "Regular Allowed", :regular_allowed, @group.regular_allowed || nil, :show_value => false
-    f.input_checkbox "Reverse Allowed", :reverse_allowed, @group.reverse_allowed || nil, :show_value => false
+    f.fieldset do
+        f.input_checkbox "Pickem Allowed", :pickem_allowed, @group.pickem_allowed || nil, :show_value => false
+        f.input_checkbox "Survival Allowed", :survival_allowed, @group.survival_allowed || nil, :show_value => false
+    end
+    f.fieldset do
+        f.input_checkbox "Heads Up Allowed", :headsup_allowed, @group.headsup_allowed || nil, :show_value => false
+        f.input_checkbox "Against The Spread Allowed", :ats_allowed, @group.ats_allowed || nil, :show_value => false
+    end
+    f.fieldset do
+        f.input_checkbox "Regular Allowed", :regular_allowed, @group.regular_allowed || nil, :show_value => false
+        f.input_checkbox "Reverse Allowed", :reverse_allowed, @group.reverse_allowed || nil, :show_value => false
+    end
     f.input_submit "Save Group"
 end}
 

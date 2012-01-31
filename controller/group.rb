@@ -10,10 +10,11 @@ class GroupController < Controller
 
     def create
         login_required
+
         @title = "Create Group"
 
         if request.post?
-            group = Group.create(
+            @group = Group.new(
                 :owner_id => user.id,
                 :created_at => Time.now,
                 :updated_at => Time.now,
@@ -27,7 +28,17 @@ class GroupController < Controller
                 :regular_allowed => request[:regular_allowed] || false,
                 :reverse_allowed => request[:reverse_allowed] || false
             )
-            redirect GroupController.r(:view, group.id)
+
+            errors = @group.validate
+            if not errors.empty?
+                flash[:message] = errors[0]
+            else
+                flash[:message] = "Group created"
+                @group.save
+                redirect GroupController.r(:view, @group.id)
+            end
+        else
+            @group = OpenStruct.new
         end
     end
 
@@ -53,8 +64,15 @@ class GroupController < Controller
             @group.ats_allowed = request[:ats_allowed] || false
             @group.regular_allowed = request[:regular_allowed] || false
             @group.reverse_allowed = request[:reverse_allowed] || false
-            @group.save
-            redirect GroupController.r(:view, @group.id)
+
+            errors = @group.validate
+            if not errors.empty?
+                flash[:message] = errors[0]
+            else
+                flash[:message] = "Group updated"
+                @group.save
+                redirect GroupController.r(:view, @group.id)
+            end
         end
     end
 
