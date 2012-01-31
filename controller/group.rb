@@ -43,4 +43,19 @@ class GroupController < Controller
         @terms = OpenStruct.new({:name => request[:name]})
         @results = Group.where(:name.like("%#{request[:name]}%"))
     end
+
+    def join(group_id)
+        redirect UserController.r(:login) unless logged_in?
+        group = Group[group_id]
+        group.add_member(user.id) unless group.is_member?(user.id)
+        redirect GroupController.r(:view, group_id)
+    end
+
+    def leave(group_id)
+        redirect UserController.r(:login) unless logged_in?
+        group = Group[group_id]
+        group.remove_member(user.id) if group.is_member?(user.id)
+        redirect GroupController.r(:view, group_id)
+    end
+
 end
