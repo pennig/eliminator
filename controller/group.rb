@@ -34,6 +34,12 @@ class GroupController < Controller
     def edit(group_id)
         login_required
         @group = Group[group_id]
+
+        if @group.owner != user
+            flash[:message] = "You must own a group in order to edit it"
+            redirect GroupController.r(:view, @group.id)
+        end
+
         @title = "Edit Group: #{@group.name}"
 
         if request.post?
