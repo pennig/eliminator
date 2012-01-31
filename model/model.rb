@@ -26,6 +26,10 @@ class Group < Sequel::Model(:groups)
     self.db = $db_connection
 end
 
+class GroupMember < Sequel::Model(:group_members)
+    self.db = $db_connection
+end
+
 class OverUnder < Sequel::Model(:over_under)
     self.db = $db_connection
 end
@@ -53,5 +57,4 @@ end
 
 class User < Sequel::Model(:users)
     self.db = $db_connection
-
 end

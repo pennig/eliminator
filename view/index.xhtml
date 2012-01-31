@@ -1,3 +1,19 @@
+<h2><a href="/group">Groups</a></h2>
+<?r if logged_in? ?>
+<p>My Groups</p>
+<ul>
+    <?r user.owned_groups.each do |group| ?>
+    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <?r end ?>
+</ul>
+<p>Joined Groups</p>
+<ul>
+    <?r user.joined_groups.each do |group| ?>
+    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <?r end ?>
+</ul>
+<?r end ?>
+
 <p>
     Congratulations, Ramaze is running fine and you can start working on your application.
 </p>

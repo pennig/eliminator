@@ -1,5 +1,9 @@
 class User
     include BCrypt
+
+    one_to_many :owned_groups, :class => Group, :key => :owner_id
+    many_to_many :joined_groups, :join_table => :group_members, :class => Group, :left_key => :user_id, :right_key => :group_id
+
     def password
         @password ||= Password.new(self.passwd)
     end

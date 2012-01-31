@@ -1,0 +1,20 @@
+<p>Owner: #{@group.owner.username}</p>
+
+<p>Group Attributes:</p>
+<ul>
+    <li>Public: #{@group.public}</li>
+    <li>Visible: #{@group.visible}</li>
+    <li>Pickem Allowed: #{@group.pickem_allowed}</li>
+    <li>Survival Allowed: #{@group.survival_allowed}</li>
+    <li>Heads Up Allowed: #{@group.headsup_allowed}</li>
+    <li>Against The Spread Allowed: #{@group.ats_allowed}</li>
+    <li>Regular Allowed: #{@group.regular_allowed}</li>
+    <li>Reverse Allowed: #{@group.reverse_allowed}</li>
+</ul>
+
+<p>Members:</p>
+<ul>
+    <?r @group.members.each do |member| ?>
+    <li>#{member.username}</li>
+    <?r end ?>
+</ul>
