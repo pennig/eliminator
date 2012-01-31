@@ -1,0 +1,19 @@
+<p>
+    <a href="/group/create">Create Group</a>
+</p>
+
+<h2>Groups I Own</h2>
+
+<ul>
+    <?r @owned.each do |group| ?>
+    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <?r end ?>
+</ul>
+
+<h2>Groups I'm Part Of</h2>
+
+<ul>
+    <?r @joined.each do |group| ?>
+    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <?r end ?>
+</ul>

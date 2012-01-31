@@ -5,7 +5,8 @@ class UserController < Controller
         @title = "Login"
         if request.post?
             user_login(request.subset(:username, :password))
-            redirect MainController.r(:'')
+            #redirect MainController.r(:'')
+            redirect_referer
         end
     end
 
