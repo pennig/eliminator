@@ -8,6 +8,9 @@
     <?r elsif @group.public ?>
         <p><a href="/group/join/#{@group.id}">Join</a></p>
     <?r end ?>
+    <?r if @group.owner == user ?>
+        <p><a href="/group/edit/#{@group.id}">Edit</a></p>
+    <?r end ?>
 <?r end ?>
 
 <p>Group Attributes:</p>
