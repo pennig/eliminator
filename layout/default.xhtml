@@ -22,12 +22,7 @@
                     <nav class="grid_6 last">
                         <ul class="clearfix">
                             <li>
-                                <a href="http://ramaze.net/">Website</a>
-                            </li>
-                            <li>
-                                <a href="http://ramaze.net/documentation/index.html">
-                                    Documentation
-                                </a>
+                                <a href="/">Home</a>
                             </li>
                             <?r if logged_in? ?>
                             <li><a href="/user/logout">Logout</a></li>
@@ -37,6 +32,10 @@
                         </ul>
                     </nav>
                 </div>
+
+                <?r if flash ?>
+                <div style="background-color: red; color: white; margin: 2em; padding: 1em;">#{flash[:message]}</div>
+                <?r end ?>
 
                 <div id="content" class="grid_12">
                     #{@content}

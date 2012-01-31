@@ -10,11 +10,11 @@ class GroupController < Controller
 
     def create
         login_required
+
         @title = "Create Group"
 
         if request.post?
-            puts request.inspect
-            group = Group.create(
+            @group = Group.new(
                 :owner_id => user.id,
                 :created_at => Time.now,
                 :updated_at => Time.now,
@@ -28,13 +28,57 @@ class GroupController < Controller
                 :regular_allowed => request[:regular_allowed] || false,
                 :reverse_allowed => request[:reverse_allowed] || false
             )
-            redirect GroupController.r(:view, group.id)
+
+            errors = @group.validate
+            if not errors.empty?
+                flash[:message] = errors[0]
+            else
+                flash[:message] = "Group created"
+                @group.save
+                redirect GroupController.r(:view, @group.id)
+            end
+        else
+            @group = OpenStruct.new
+        end
+    end
+
+    def edit(group_id)
+        login_required
+        @group = Group[group_id]
+
+        if @group.owner != user
+            flash[:message] = "You must own a group in order to edit it"
+            redirect GroupController.r(:view, @group.id)
+        end
+
+        @title = "Edit Group: #{@group.name}"
+
+        if request.post?
+            @group.updated_at = Time.now
+            @group.name = request[:name]
+            @group.public = request[:public] || false
+            @group.visible = request[:visible] || false
+            @group.pickem_allowed = request[:pickem_allowed] || false
+            @group.survival_allowed = request[:survival_allowed] || false
+            @group.headsup_allowed = request[:headsup_allowed] || false
+            @group.ats_allowed = request[:ats_allowed] || false
+            @group.regular_allowed = request[:regular_allowed] || false
+            @group.reverse_allowed = request[:reverse_allowed] || false
+
+            errors = @group.validate
+            if not errors.empty?
+                flash[:message] = errors[0]
+            else
+                flash[:message] = "Group updated"
+                @group.save
+                redirect GroupController.r(:view, @group.id)
+            end
         end
     end
 
     def view(group_id)
         @group = Group[group_id]
-        @title = "Group #{group_id}"
+        @title = "Group: #{@group.name}"
     end
 
     def search
