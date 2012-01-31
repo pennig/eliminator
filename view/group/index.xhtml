@@ -1,12 +1,15 @@
 <p>
     <a href="/group/create">Create Group</a>
 </p>
+<p>
+    <a href="/group/search">Find Group</a>
+</p>
 
 <h2>Groups I Own</h2>
 
 <ul>
     <?r @owned.each do |group| ?>
-    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <li><a href="/group/view/#{group.id}">#{group.name}</a></li>
     <?r end ?>
 </ul>
 
@@ -14,6 +17,6 @@
 
 <ul>
     <?r @joined.each do |group| ?>
-    <li><a href="/group/view/#{group.id}">#{group.id}</a></li>
+    <li><a href="/group/view/#{group.id}">#{group.name}</a></li>
     <?r end ?>
 </ul>
