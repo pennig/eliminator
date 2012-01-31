@@ -58,3 +58,15 @@ end
 class User < Sequel::Model(:users)
     self.db = $db_connection
 end
+
+class VTeamSchedule < Sequel::Model(:v_team_schedule)
+    self.db = $db_connection
+end
+
+class VTeamStatistics < Sequel::Model(:v_team_statistics)
+    self.db = $db_connection
+end
+
+class VOpponentStatistics < Sequel::Model(:v_opponent_statistics)
+    self.db = $db_connection
+end
