@@ -1,4 +1,4 @@
-<h2><a href="/team/#{@schedule.away_team.short_name}">#{@schedule.away_team.name}</a> @ <a href="/team/#{@schedule.home_team.short_name}">#{@schedule.home_team.name}</a></h2>
+<h2><a href="/team/info/#{@schedule.season}/#{@schedule.away_team.short_name}">#{@schedule.away_team.name}</a> @ <a href="/team/info/#{@schedule.season}/#{@schedule.home_team.short_name}">#{@schedule.home_team.name}</a></h2>
 <h3>Kickoff: #{Time.at(@schedule.game_time)}</h3>
 <p>Score: #{@results.away_score} - #{@results.home_score}</p>
 <p>Status: #{@results.status}</p>

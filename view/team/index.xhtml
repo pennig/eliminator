@@ -1,18 +1,27 @@
-<h2>#{@team.name}</h2>
-<img src="/images/teams-xl/#{@team.short_name.downcase}.png">
-<h3>Schedule</h3>
-<table>
-    <?r @schedule_and_results.each do |game| ?>
+<h2>Teams</h2>
+<table style="width:40%;float:left">
+    <tr><td colspan="3">AFC</td></tr>
+    <?r ["north","south","east","west"].each do |division| ?>
+    <tr><th colspan="3">#{division.capitalize}</th></tr>
+    <?r @afc[division].each do |team| ?>
     <tr>
-        <td>#{game.week_number}</td>
-        <td>
-        #{game.away_team.name} #{game.away_score} - #{game.home_team.name} #{game.home_score}
-        </td>
-        <td><a href="/game/#{game.game_id}">Game Stats</a></td>
+        <td> <a href="/team/info/#{@season}/#{team.short_name}">#{team.name}</a> </td>
+        <td> #{team.record(@season)[:won]} - #{team.record(@season)[:lost]} - #{team.record(@season)[:tied]} </td>
+        <td>streak...</td>
     </tr>
     <?r end ?>
+    <?r end ?>
 </table>
-<h3>Offense Stats</h3>
-<p>#{@stats.inspect}</p>
-<h3>Defense Stats</h3>
-<p>#{@opp_stats.inspect}</p>
+<table style="width:40%;float:left">
+    <tr><td colspan="3">NFC</td></tr>
+    <?r ["north","south","east","west"].each do |division| ?>
+    <tr><th colspan="3">#{division.capitalize}</th></tr>
+    <?r @nfc[division].each do |team| ?>
+    <tr>
+        <td> <a href="/team/info/#{@season}/#{team.short_name}">#{team.name}</a> </td>
+        <td> #{team.record(@season)[:won]} - #{team.record(@season)[:lost]} - #{team.record(@season)[:tied]} </td>
+        <td>streak...</td>
+    </tr>
+    <?r end ?>
+    <?r end ?>
+</table>
