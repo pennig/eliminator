@@ -1,11 +1,13 @@
 <table>
-    <tr><th>Home Team</th><th>Score</th><th>Away Team</th><th>Score</th></tr>
+    <tr><th>Week</th><th>Home Team</th><th>Score</th><th>Away Team</th><th>Score</th></tr>
     <?r @schedule.each do |week| ?>
     <tr>
-        <td <?r if week.results.home_score > week.results.away_score ?>style="font-weight:bold" <?r end ?>>#{week.home_team.name}</td>
-        <td>#{week.results.home_score}</td>
-        <td>#{week.away_team.name}</td>
-        <td>#{week.results.away_score}</td>
+        <td><a href="/schedule/#{week.season}/#{week.week_type}/#{week.week_number}">#{week.week_number}</a></td>
+        <td <?r if week.home_score > week.away_score ?>style="font-weight:bold" <?r end ?>><a href="/team/#{week.home_team.short_name}">#{week.home_team.name}</a></td>
+        <td>#{week.home_score}</td>
+        <td <?r if week.home_score < week.away_score ?>style="font-weight:bold" <?r end ?>><a href="/team/#{week.away_team.short_name}">#{week.away_team.name}</a></td>
+        <td>#{week.away_score}</td>
+        <td><a href="/game/#{week.game_id}">Game Stats</a></td>
     </tr>
     <?r end ?>
 </table>
