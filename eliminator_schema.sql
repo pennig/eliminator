@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.18)
 # Database: eliminator
-# Generation Time: 2012-02-01 05:13:46 +0000
+# Generation Time: 2012-02-01 17:38:27 +0000
 # ************************************************************
 
 
@@ -66,6 +66,52 @@ CREATE TABLE `bets` (
 
 
 
+# Dump of table full_records
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `full_records`;
+
+CREATE TABLE `full_records` (
+  `team_id` tinyint(4) NOT NULL DEFAULT '0',
+  `season` smallint(6) NOT NULL DEFAULT '0',
+  `won` decimal(41,0) DEFAULT NULL,
+  `lost` decimal(41,0) DEFAULT NULL,
+  `tied` decimal(41,0) DEFAULT NULL,
+  `conference_won` decimal(41,0) DEFAULT NULL,
+  `conference_lost` decimal(41,0) DEFAULT NULL,
+  `conference_tied` decimal(41,0) DEFAULT NULL,
+  `nonconference_won` decimal(41,0) DEFAULT NULL,
+  `nonconference_lost` decimal(41,0) DEFAULT NULL,
+  `nonconference_tied` decimal(41,0) DEFAULT NULL,
+  `nfc_north_won` decimal(41,0) DEFAULT NULL,
+  `nfc_north_lost` decimal(41,0) DEFAULT NULL,
+  `nfc_north_tied` decimal(41,0) DEFAULT NULL,
+  `nfc_south_won` decimal(41,0) DEFAULT NULL,
+  `nfc_south_lost` decimal(41,0) DEFAULT NULL,
+  `nfc_south_tied` decimal(41,0) DEFAULT NULL,
+  `nfc_east_won` decimal(41,0) DEFAULT NULL,
+  `nfc_east_lost` decimal(41,0) DEFAULT NULL,
+  `nfc_east_tied` decimal(41,0) DEFAULT NULL,
+  `nfc_west_won` decimal(41,0) DEFAULT NULL,
+  `nfc_west_lost` decimal(41,0) DEFAULT NULL,
+  `nfc_west_tied` decimal(41,0) DEFAULT NULL,
+  `afc_north_won` decimal(41,0) DEFAULT NULL,
+  `afc_north_lost` decimal(41,0) DEFAULT NULL,
+  `afc_north_tied` decimal(41,0) DEFAULT NULL,
+  `afc_south_won` decimal(41,0) DEFAULT NULL,
+  `afc_south_lost` decimal(41,0) DEFAULT NULL,
+  `afc_south_tied` decimal(41,0) DEFAULT NULL,
+  `afc_east_won` decimal(41,0) DEFAULT NULL,
+  `afc_east_lost` decimal(41,0) DEFAULT NULL,
+  `afc_east_tied` decimal(41,0) DEFAULT NULL,
+  `afc_west_won` decimal(41,0) DEFAULT NULL,
+  `afc_west_lost` decimal(41,0) DEFAULT NULL,
+  `afc_west_tied` decimal(41,0) DEFAULT NULL,
+  PRIMARY KEY (`team_id`,`season`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table game_results
 # ------------------------------------------------------------
 
@@ -85,6 +131,16 @@ CREATE TABLE `game_results` (
   KEY `game_id` (`game_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+DELIMITER ;;
+/*!50003 SET SESSION SQL_MODE="" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_insert_update_full_records` AFTER INSERT ON `game_results` FOR EACH ROW call generate_full_records() */;;
+/*!50003 SET SESSION SQL_MODE="" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_update_update_full_records` AFTER UPDATE ON `game_results` FOR EACH ROW call generate_full_records() */;;
+/*!50003 SET SESSION SQL_MODE="" */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_delete_update_full_records` AFTER DELETE ON `game_results` FOR EACH ROW call generate_full_records() */;;
+DELIMITER ;
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;
 
 
 # Dump of table game_stats
@@ -770,6 +826,159 @@ AS select
    `oid`.`team_id` AS `team_id`,
    `oid`.`season` AS `season`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_attempts`) AS `avg_xp_conversions`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_attempts`) AS `avg_fg_conversions`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`,sum(`gs`.`total_drives`) AS `total_total_drives`,avg(`gs`.`total_drives`) AS `avg_total_drives`,sum(`gs`.`average_drive_start`) AS `total_average_drive_start`,avg(`gs`.`average_drive_start`) AS `avg_average_drive_start`
 from (`game_stats` `gs` join `v_team_schedule` `oid` on(((`gs`.`game_id` = `oid`.`game_id`) and (`gs`.`team_id` = `oid`.`opponent_id`)))) group by `oid`.`season`,`oid`.`team_id`;
+
+--
+-- Dumping routines (PROCEDURE) for database 'eliminator'
+--
+DELIMITER ;;
+
+# Dump of PROCEDURE generate_full_records
+# ------------------------------------------------------------
+
+/*!50003 DROP PROCEDURE IF EXISTS `generate_full_records` */;;
+/*!50003 SET SESSION SQL_MODE=""*/;;
+/*!50003 CREATE*/ /*!50020 DEFINER=`root`@`localhost`*/ /*!50003 PROCEDURE `generate_full_records`()
+begin
+delete from full_records;
+insert into full_records
+select
+team_id,season,
+sum(won) as won,
+sum(lost) as lost,
+sum(tied) as tied,
+sum(conference_won) as conference_won,
+sum(conference_lost) as conference_lost,
+sum(conference_tied) as conference_tied,
+sum(nonconference_won) as nonconference_won,
+sum(nonconference_lost) as nonconference_lost,
+sum(nonconference_tied) as nonconference_tied,
+sum(nfc_north_won) as nfc_north_won,
+sum(nfc_north_lost) as nfc_north_lost,
+sum(nfc_north_tied) as nfc_north_tied,
+sum(nfc_south_won) as nfc_south_won,
+sum(nfc_south_lost) as nfc_south_lost,
+sum(nfc_south_tied) as nfc_south_tied,
+sum(nfc_east_won) as nfc_east_won,
+sum(nfc_east_lost) as nfc_east_lost,
+sum(nfc_east_tied) as nfc_east_tied,
+sum(nfc_west_won) as nfc_west_won,
+sum(nfc_west_lost) as nfc_west_lost,
+sum(nfc_west_tied) as nfc_west_tied,
+sum(afc_north_won) as afc_north_won,
+sum(afc_north_lost) as afc_north_lost,
+sum(afc_north_tied) as afc_north_tied,
+sum(afc_south_won) as afc_south_won,
+sum(afc_south_lost) as afc_south_lost,
+sum(afc_south_tied) as afc_south_tied,
+sum(afc_east_won) as afc_east_won,
+sum(afc_east_lost) as afc_east_lost,
+sum(afc_east_tied) as afc_east_tied,
+sum(afc_west_won) as afc_west_won,
+sum(afc_west_lost) as afc_west_lost,
+sum(afc_west_tied) as afc_west_tied
+from (select game_id,season,home_team_id as team_id,
+case when (home_team_id = winning_team_id) then 1 else 0 end as won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null) then 1 else 0 end as lost,
+case when (winning_team_id is null) then 1 else 0 end as tied,
+
+case when (home_team_id = winning_team_id and t.conference = ot.conference) then 1 else 0 end as conference_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and t.conference = ot.conference) then 1 else 0 end as conference_lost,
+case when (winning_team_id is null and t.conference = ot.conference) then 1 else 0 end as conference_tied,
+case when (home_team_id = winning_team_id and t.conference <> ot.conference) then 1 else 0 end as nonconference_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and t.conference <> ot.conference) then 1 else 0 end as nonconference_lost,
+case when (winning_team_id is null and t.conference <> ot.conference) then 1 else 0 end as nonconference_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_tied,
+
+case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_tied
+
+from v_schedule_and_results
+join teams t on t.id=home_team_id
+join teams ot on ot.id=away_team_id
+where status='FINAL'
+union all
+select game_id,season,away_team_id as team_id,
+case when (away_team_id = winning_team_id) then 1 else 0 end as won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null) then 1 else 0 end as lost,
+case when (winning_team_id is null) then 1 else 0 end as tied,
+
+case when (away_team_id = winning_team_id and t.conference = ot.conference) then 1 else 0 end as conference_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and t.conference = ot.conference) then 1 else 0 end as conference_lost,
+case when (winning_team_id is null and t.conference = ot.conference) then 1 else 0 end as conference_tied,
+case when (away_team_id = winning_team_id and t.conference <> ot.conference) then 1 else 0 end as nonconference_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and t.conference <> ot.conference) then 1 else 0 end as nonconference_lost,
+case when (winning_team_id is null and t.conference <> ot.conference) then 1 else 0 end as nonconference_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_tied,
+
+case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_lost,
+case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_tied
+
+from v_schedule_and_results
+join teams t on t.id=away_team_id
+join teams ot on ot.id=home_team_id
+where status='FINAL'
+) gamestats
+group by season,team_id;
+end */;;
+
+/*!50003 SET SESSION SQL_MODE=@OLD_SQL_MODE */;;
+DELIMITER ;
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
