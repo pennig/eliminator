@@ -1,4 +1,18 @@
 <h2>#{@team.name}</h2>
-<img src="#{@team_logo}">
+<img src="/images/teams-xl/#{@team.short_name.downcase}.png">
+<h3>Schedule</h3>
+<table>
+    <?r @schedule_and_results.each do |game| ?>
+    <tr>
+        <td>#{game.week_number}</td>
+        <td>
+        #{game.away_team.name} #{game.away_score} - #{game.home_team.name} #{game.home_score}
+        </td>
+        <td><a href="/game/#{game.game_id}">Game Stats</a></td>
+    </tr>
+    <?r end ?>
+</table>
+<h3>Offense Stats</h3>
 <p>#{@stats.inspect}</p>
+<h3>Defense Stats</h3>
 <p>#{@opp_stats.inspect}</p>

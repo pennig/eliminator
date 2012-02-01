@@ -7,7 +7,7 @@ class TeamController < Controller
         end
         @stats = @team.statistics(season)
         @opp_stats = @team.opponent_statistics(season)
-        @team_logo = "/images/teams-xl/#{@team.short_name.downcase}.png"
-    end
 
+        @schedule_and_results = VScheduleAndResults.where( {:home_team_id => @team.id } | {:away_team_id => @team.id}, :season => season)
+    end
 end

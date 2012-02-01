@@ -70,3 +70,10 @@ end
 class VOpponentStatistics < Sequel::Model(:v_opponent_statistics)
     self.db = $db_connection
 end
+
+class VScheduleAndResults < Sequel::Model(:v_schedule_and_results)
+    many_to_one :home_team, :class => Team, :key => :home_team_id
+    many_to_one :away_team, :class => Team, :key => :away_team_id
+
+    self.db = $db_connection
+end
