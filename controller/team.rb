@@ -1,5 +1,3 @@
-#Ramaze::Route['/team\/([\w]+)\/([\w]+)'] = "/team/info/%s/%s"
-Ramaze::Route['/team/([\w]+)'] = "/team/info/%s"
 class TeamController < Controller
     def index(season=2011)
         @start_time = Time.now
