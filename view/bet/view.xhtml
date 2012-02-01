@@ -1,0 +1,13 @@
+<table>
+<tr><th>User</th><th>Team</th></tr>
+<?r @bets.each do |bet|
+        if bet.complete? and bet.correct?
+            style = "style='font-weight:bold'"
+        end
+?>
+<tr>
+    <td #{style}><a href="/user/info/#{bet.username}">#{bet.username}</a></td>
+    <td #{style}><a href="/team/info/#{bet.short_name}"> <img src="/images/teams-sm/#{bet.short_name.downcase}.png"> #{bet.team_name} </a></td>
+</tr>
+<?r end ?>
+</table>

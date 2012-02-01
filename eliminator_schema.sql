@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.18)
 # Database: eliminator
-# Generation Time: 2012-02-01 20:19:35 +0000
+# Generation Time: 2012-02-01 21:26:16 +0000
 # ************************************************************
 
 
@@ -373,6 +373,35 @@ CREATE TABLE `users` (
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table v_bets_with_users_teams_results
+# ------------------------------------------------------------
+
+DROP VIEW IF EXISTS `v_bets_with_users_teams_results`;
+
+CREATE TABLE `v_bets_with_users_teams_results` (
+   `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+   `created_at` DATETIME DEFAULT NULL,
+   `updated_at` DATETIME DEFAULT NULL,
+   `user_id` INT(11) DEFAULT NULL,
+   `season` SMALLINT(6) DEFAULT NULL,
+   `week_number` TINYINT(4) DEFAULT NULL,
+   `week_type` VARCHAR(255) DEFAULT NULL,
+   `game_id` VARCHAR(255) DEFAULT NULL,
+   `team_id` TINYINT(4) DEFAULT NULL,
+   `spread_id` INT(11) DEFAULT NULL,
+   `bet_set_id` INT(11) DEFAULT NULL,
+   `survival_pickem` TINYINT(1) NOT NULL,
+   `headsup_ats` TINYINT(1) NOT NULL,
+   `regular_reverse` TINYINT(1) NOT NULL,
+   `username` VARCHAR(255) DEFAULT NULL,
+   `team_name` VARCHAR(255) DEFAULT NULL,
+   `short_name` VARCHAR(3) DEFAULT NULL,
+   `status` ENUM('NOT_STARTED','IN_PROGRESS','HALFTIME','FINAL') DEFAULT NULL,
+   `winning_team_id` TINYINT(4) DEFAULT NULL
+) ENGINE=MyISAM;
 
 
 
@@ -868,6 +897,34 @@ AS select
    `full_records`.`afc_west_lost` AS `afc_west_lost`,
    `full_records`.`afc_west_tied` AS `afc_west_tied`
 from (`teams` join `full_records` on((`teams`.`id` = `full_records`.`team_id`)));
+
+
+# Replace placeholder table for v_bets_with_users_teams_results with correct view syntax
+# ------------------------------------------------------------
+
+DROP TABLE `v_bets_with_users_teams_results`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_bets_with_users_teams_results`
+AS select
+   `bets`.`id` AS `id`,
+   `bets`.`created_at` AS `created_at`,
+   `bets`.`updated_at` AS `updated_at`,
+   `bets`.`user_id` AS `user_id`,
+   `bets`.`season` AS `season`,
+   `bets`.`week_number` AS `week_number`,
+   `bets`.`week_type` AS `week_type`,
+   `bets`.`game_id` AS `game_id`,
+   `bets`.`team_id` AS `team_id`,
+   `bets`.`spread_id` AS `spread_id`,
+   `bets`.`bet_set_id` AS `bet_set_id`,
+   `bets`.`survival_pickem` AS `survival_pickem`,
+   `bets`.`headsup_ats` AS `headsup_ats`,
+   `bets`.`regular_reverse` AS `regular_reverse`,
+   `users`.`username` AS `username`,
+   `teams`.`name` AS `team_name`,
+   `teams`.`short_name` AS `short_name`,
+   `game_results`.`status` AS `status`,
+   `game_results`.`winning_team_id` AS `winning_team_id`
+from (((`bets` join `users` on((`users`.`id` = `bets`.`user_id`))) join `teams` on((`bets`.`team_id` = `teams`.`id`))) join `game_results` on((`bets`.`game_id` = `game_results`.`game_id`)));
 
 
 # Replace placeholder table for v_schedule_and_results with correct view syntax

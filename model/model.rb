@@ -92,3 +92,32 @@ end
 class VTeamWithRecord < Sequel::Model(:v_teams_with_records)
     self.db = $db_connection
 end
+
+class VBetWithUserTeamResult < Sequel::Model(:v_bets_with_users_teams_results)
+    self.db = $db_connection
+
+    def complete?
+        self.status == "FINAL"
+    end
+
+    def correct?
+        if self.headsup_ats == false and self.regular_reverse == false
+            return headsup_regular_correct?
+        elsif self.headsup_ats == true and self.regular_reverse == false
+            return ats_regular_correct?
+        elsif self.headsup_ats == false and self.regular_reverse == true
+            return headsup_reverse_correct?
+        elsif self.headsup_ats == true and self.regular_reverse == true
+            return ats_reverse_correct?
+        end
+    end
+
+    def headsup_regular_correct?
+        self.winning_team_id == self.team_id
+    end
+
+    def headsup_reverse_correct?
+        (self.winning_team_id != self.team_id and not self.winning_team_id.nil?)
+    end
+
+end
