@@ -77,3 +77,10 @@ class VScheduleAndResults < Sequel::Model(:v_schedule_and_results)
 
     self.db = $db_connection
 end
+
+class VTeamRecord < Sequel::Model(:v_team_records)
+    self.db = $db_connection
+end
+class VFullRecord < Sequel::Model(:v_full_records)
+    self.db = $db_connection
+end

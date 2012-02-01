@@ -2,6 +2,7 @@
 Ramaze::Route['/team/([\w]+)'] = "/team/info/%s"
 class TeamController < Controller
     def index(season=2011)
+        @start_time = Time.now
         @afc = {}
         @nfc = {}
         @afc["east"] = Team.where(:conference => "AFC", :division => "East").all
@@ -12,7 +13,8 @@ class TeamController < Controller
         @nfc["west"] = Team.where(:conference => "NFC", :division => "West").all
         @nfc["north"] = Team.where(:conference => "NFC", :division => "North").all
         @nfc["south"] = Team.where(:conference => "NFC", :division => "South").all
-        @season = 2011
+        @records = VFullRecord.where(:season => season).to_hash(:team_id)
+        @season = season
     end
 
     def info(season=2011,team_identifier)
