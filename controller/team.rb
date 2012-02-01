@@ -3,15 +3,14 @@ class TeamController < Controller
         @start_time = Time.now
         @afc = {}
         @nfc = {}
-        @afc["east"] = Team.where(:conference => "AFC", :division => "East").all
-        @afc["west"] = Team.where(:conference => "AFC", :division => "West").all
-        @afc["north"] = Team.where(:conference => "AFC", :division => "North").all
-        @afc["south"] = Team.where(:conference => "AFC", :division => "South").all
-        @nfc["east"] = Team.where(:conference => "NFC", :division => "East").all
-        @nfc["west"] = Team.where(:conference => "NFC", :division => "West").all
-        @nfc["north"] = Team.where(:conference => "NFC", :division => "North").all
-        @nfc["south"] = Team.where(:conference => "NFC", :division => "South").all
-        @records = VFullRecord.where(:season => season).to_hash(:team_id)
+        @afc["east"] = VTeamWithRecord.where(:season => season, :conference => "AFC", :division => "East").order(:won.desc,:lost.asc,:tied.desc).all
+        @afc["west"] = VTeamWithRecord.where(:season => season, :conference => "AFC", :division => "West").order(:won.desc,:lost.asc,:tied.desc).all
+        @afc["north"] = VTeamWithRecord.where(:season => season, :conference => "AFC", :division => "North").order(:won.desc,:lost.asc,:tied.desc).all
+        @afc["south"] = VTeamWithRecord.where(:season => season, :conference => "AFC", :division => "South").order(:won.desc,:lost.asc,:tied.desc).all
+        @nfc["east"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "East").order(:won.desc,:lost.asc,:tied.desc).all
+        @nfc["west"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "West").order(:won.desc,:lost.asc,:tied.desc).all
+        @nfc["north"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "North").order(:won.desc,:lost.asc,:tied.desc).all
+        @nfc["south"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "South").order(:won.desc,:lost.asc,:tied.desc).all
         @season = season
     end
 

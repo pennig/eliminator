@@ -84,3 +84,11 @@ end
 class VFullRecord < Sequel::Model(:v_full_records)
     self.db = $db_connection
 end
+
+class FullRecord < Sequel::Model(:full_records)
+    self.db = $db_connection
+end
+
+class VTeamWithRecord < Sequel::Model(:v_teams_with_records)
+    self.db = $db_connection
+end

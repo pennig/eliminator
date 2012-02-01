@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.18)
 # Database: eliminator
-# Generation Time: 2012-02-01 17:38:27 +0000
+# Generation Time: 2012-02-01 20:19:35 +0000
 # ************************************************************
 
 
@@ -134,9 +134,9 @@ CREATE TABLE `game_results` (
 
 DELIMITER ;;
 /*!50003 SET SESSION SQL_MODE="" */;;
-/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_insert_update_full_records` AFTER INSERT ON `game_results` FOR EACH ROW call generate_full_records() */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_insert_update_full_records` AFTER INSERT ON `game_results` FOR EACH ROW begin if NEW.status ='FINAL' then call generate_full_records(); end if; end */;;
 /*!50003 SET SESSION SQL_MODE="" */;;
-/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_update_update_full_records` AFTER UPDATE ON `game_results` FOR EACH ROW call generate_full_records() */;;
+/*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_update_update_full_records` AFTER UPDATE ON `game_results` FOR EACH ROW begin if NEW.status ='FINAL' then call generate_full_records(); end if; end */;;
 /*!50003 SET SESSION SQL_MODE="" */;;
 /*!50003 CREATE */ /*!50017 DEFINER=`root`@`localhost` */ /*!50003 TRIGGER `on_delete_update_full_records` AFTER DELETE ON `game_results` FOR EACH ROW call generate_full_records() */;;
 DELIMITER ;
@@ -720,6 +720,56 @@ CREATE TABLE `v_team_statistics` (
 
 
 
+# Dump of table v_teams_with_records
+# ------------------------------------------------------------
+
+DROP VIEW IF EXISTS `v_teams_with_records`;
+
+CREATE TABLE `v_teams_with_records` (
+   `id` INT(11) UNSIGNED NOT NULL DEFAULT '0',
+   `name` VARCHAR(255) DEFAULT NULL,
+   `short_name` VARCHAR(3) DEFAULT NULL,
+   `stadium_name` VARCHAR(255) DEFAULT NULL,
+   `stadium_capacity` INT(11) DEFAULT NULL,
+   `conference` VARCHAR(255) NOT NULL DEFAULT '',
+   `division` VARCHAR(255) NOT NULL DEFAULT '',
+   `season` SMALLINT(6) NOT NULL DEFAULT '0',
+   `won` DECIMAL(41) DEFAULT NULL,
+   `lost` DECIMAL(41) DEFAULT NULL,
+   `tied` DECIMAL(41) DEFAULT NULL,
+   `conference_won` DECIMAL(41) DEFAULT NULL,
+   `conference_lost` DECIMAL(41) DEFAULT NULL,
+   `conference_tied` DECIMAL(41) DEFAULT NULL,
+   `nonconference_won` DECIMAL(41) DEFAULT NULL,
+   `nonconference_lost` DECIMAL(41) DEFAULT NULL,
+   `nfc_north_won` DECIMAL(41) DEFAULT NULL,
+   `nfc_north_lost` DECIMAL(41) DEFAULT NULL,
+   `nfc_north_tied` DECIMAL(41) DEFAULT NULL,
+   `nfc_south_won` DECIMAL(41) DEFAULT NULL,
+   `nfc_south_lost` DECIMAL(41) DEFAULT NULL,
+   `nfc_south_tied` DECIMAL(41) DEFAULT NULL,
+   `nfc_east_won` DECIMAL(41) DEFAULT NULL,
+   `nfc_east_lost` DECIMAL(41) DEFAULT NULL,
+   `nfc_east_tied` DECIMAL(41) DEFAULT NULL,
+   `nfc_west_won` DECIMAL(41) DEFAULT NULL,
+   `nfc_west_lost` DECIMAL(41) DEFAULT NULL,
+   `nfc_west_tied` DECIMAL(41) DEFAULT NULL,
+   `afc_north_won` DECIMAL(41) DEFAULT NULL,
+   `afc_north_lost` DECIMAL(41) DEFAULT NULL,
+   `afc_north_tied` DECIMAL(41) DEFAULT NULL,
+   `afc_south_won` DECIMAL(41) DEFAULT NULL,
+   `afc_south_lost` DECIMAL(41) DEFAULT NULL,
+   `afc_south_tied` DECIMAL(41) DEFAULT NULL,
+   `afc_east_won` DECIMAL(41) DEFAULT NULL,
+   `afc_east_lost` DECIMAL(41) DEFAULT NULL,
+   `afc_east_tied` DECIMAL(41) DEFAULT NULL,
+   `afc_west_won` DECIMAL(41) DEFAULT NULL,
+   `afc_west_lost` DECIMAL(41) DEFAULT NULL,
+   `afc_west_tied` DECIMAL(41) DEFAULT NULL
+) ENGINE=MyISAM;
+
+
+
 
 
 # Replace placeholder table for v_team_records with correct view syntax
@@ -765,10 +815,59 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 AS select
    `v_schedule_and_results`.`game_id` AS `game_id`,
    `v_schedule_and_results`.`season` AS `season`,
-   `v_schedule_and_results`.`home_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_tied`
+   `v_schedule_and_results`.`home_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and `ot`.`conference` and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and `ot`.`conference` and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_tied`
 from ((`v_schedule_and_results` join `teams` `t` on((`t`.`id` = `v_schedule_and_results`.`home_team_id`))) join `teams` `ot` on((`ot`.`id` = `v_schedule_and_results`.`away_team_id`)))
-where (`v_schedule_and_results`.`status` = 'FINAL') union all select `v_schedule_and_results`.`game_id` AS `game_id`,`v_schedule_and_results`.`season` AS `season`,`v_schedule_and_results`.`away_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_tied` from ((`v_schedule_and_results` join `teams` `t` on((`t`.`id` = `v_schedule_and_results`.`away_team_id`))) join `teams` `ot` on((`ot`.`id` = `v_schedule_and_results`.`home_team_id`)))
+where (`v_schedule_and_results`.`status` = 'FINAL') union all select `v_schedule_and_results`.`game_id` AS `game_id`,`v_schedule_and_results`.`season` AS `season`,`v_schedule_and_results`.`away_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_tied` from ((`v_schedule_and_results` join `teams` `t` on((`t`.`id` = `v_schedule_and_results`.`away_team_id`))) join `teams` `ot` on((`ot`.`id` = `v_schedule_and_results`.`home_team_id`)))
 where (`v_schedule_and_results`.`status` = 'FINAL');
+
+
+# Replace placeholder table for v_teams_with_records with correct view syntax
+# ------------------------------------------------------------
+
+DROP TABLE `v_teams_with_records`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_teams_with_records`
+AS select
+   `teams`.`id` AS `id`,
+   `teams`.`name` AS `name`,
+   `teams`.`short_name` AS `short_name`,
+   `teams`.`stadium_name` AS `stadium_name`,
+   `teams`.`stadium_capacity` AS `stadium_capacity`,
+   `teams`.`conference` AS `conference`,
+   `teams`.`division` AS `division`,
+   `full_records`.`season` AS `season`,
+   `full_records`.`won` AS `won`,
+   `full_records`.`lost` AS `lost`,
+   `full_records`.`tied` AS `tied`,
+   `full_records`.`conference_won` AS `conference_won`,
+   `full_records`.`conference_lost` AS `conference_lost`,
+   `full_records`.`conference_tied` AS `conference_tied`,
+   `full_records`.`nonconference_won` AS `nonconference_won`,
+   `full_records`.`nonconference_lost` AS `nonconference_lost`,
+   `full_records`.`nfc_north_won` AS `nfc_north_won`,
+   `full_records`.`nfc_north_lost` AS `nfc_north_lost`,
+   `full_records`.`nfc_north_tied` AS `nfc_north_tied`,
+   `full_records`.`nfc_south_won` AS `nfc_south_won`,
+   `full_records`.`nfc_south_lost` AS `nfc_south_lost`,
+   `full_records`.`nfc_south_tied` AS `nfc_south_tied`,
+   `full_records`.`nfc_east_won` AS `nfc_east_won`,
+   `full_records`.`nfc_east_lost` AS `nfc_east_lost`,
+   `full_records`.`nfc_east_tied` AS `nfc_east_tied`,
+   `full_records`.`nfc_west_won` AS `nfc_west_won`,
+   `full_records`.`nfc_west_lost` AS `nfc_west_lost`,
+   `full_records`.`nfc_west_tied` AS `nfc_west_tied`,
+   `full_records`.`afc_north_won` AS `afc_north_won`,
+   `full_records`.`afc_north_lost` AS `afc_north_lost`,
+   `full_records`.`afc_north_tied` AS `afc_north_tied`,
+   `full_records`.`afc_south_won` AS `afc_south_won`,
+   `full_records`.`afc_south_lost` AS `afc_south_lost`,
+   `full_records`.`afc_south_tied` AS `afc_south_tied`,
+   `full_records`.`afc_east_won` AS `afc_east_won`,
+   `full_records`.`afc_east_lost` AS `afc_east_lost`,
+   `full_records`.`afc_east_tied` AS `afc_east_tied`,
+   `full_records`.`afc_west_won` AS `afc_west_won`,
+   `full_records`.`afc_west_lost` AS `afc_west_lost`,
+   `full_records`.`afc_west_tied` AS `afc_west_tied`
+from (`teams` join `full_records` on((`teams`.`id` = `full_records`.`team_id`)));
 
 
 # Replace placeholder table for v_schedule_and_results with correct view syntax
@@ -890,35 +989,35 @@ case when (winning_team_id is null and t.conference <> ot.conference) then 1 els
 
 case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_tied,
+case when (winning_team_id is null and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_tied,
 
 case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_tied,
+case when (winning_team_id is null and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_tied,
 
 case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_tied,
+case when (winning_team_id is null and ot.conference and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_tied,
 
 case when (home_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_tied,
+case when (winning_team_id is null and ot.conference and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_tied,
 
 case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_tied,
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_tied,
 
 case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_tied,
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_tied,
 
 case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_tied,
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_tied,
 
 case when (home_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_tied
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_tied
 
 from v_schedule_and_results
 join teams t on t.id=home_team_id
@@ -939,41 +1038,40 @@ case when (winning_team_id is null and t.conference <> ot.conference) then 1 els
 
 case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_tied,
+case when (winning_team_id is null and ot.conference = "AFC" and ot.division = "North") then 1 else 0 end as afc_north_tied,
 
 case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_tied,
+case when (winning_team_id is null and ot.conference = "AFC" and ot.division = "South") then 1 else 0 end as afc_south_tied,
 
 case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_tied,
+case when (winning_team_id is null and ot.conference = "AFC" and ot.division = "East") then 1 else 0 end as afc_east_tied,
 
 case when (away_team_id = winning_team_id and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_tied,
+case when (winning_team_id is null and ot.conference = "AFC" and ot.division = "West") then 1 else 0 end as afc_west_tied,
 
 case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_tied,
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "North") then 1 else 0 end as nfc_north_tied,
 
 case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_tied,
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "South") then 1 else 0 end as nfc_south_tied,
 
 case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_tied,
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "East") then 1 else 0 end as nfc_east_tied,
 
 case when (away_team_id = winning_team_id and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_lost,
-case when (winning_team_id is null and t.conference <> ot.conference and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_tied
+case when (winning_team_id is null and ot.conference = "NFC" and ot.division = "West") then 1 else 0 end as nfc_west_tied
 
 from v_schedule_and_results
 join teams t on t.id=away_team_id
 join teams ot on ot.id=home_team_id
-where status='FINAL'
-) gamestats
+where status='FINAL') gamestats
 group by season,team_id;
 end */;;
 
