@@ -65,7 +65,7 @@ class Team
     def won_lost(game_data)
         {
             :won => game_data.where(:winning_team_id => self.id).count,
-            :lost => game_data.where(~:winning_team_id => self.id).where(~:winning_team_id => 0).count,
+            :lost => game_data.where(~:winning_team_id => self.id).where(~:winning_team_id => nil).count,
             :tied => game_data.where(:winning_team_id => nil).count
         }
     end
