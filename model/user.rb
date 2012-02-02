@@ -14,6 +14,24 @@ class User
         self.passwd = @password
     end
 
+    def validate
+        errors = []
+        if self.username.nil? or self.username.size < 3
+            errors << "Username must be at least three characters"
+        end
+        if not User.by_username(self.username).nil?
+            errors << "That username is already taken!"
+        end
+        if self.email.nil? or self.email.empty?
+            errors << "Email is required"
+        end
+        return errors
+    end
+
+    def self.by_username(username)
+        self.where(:username => username).first
+    end
+
     def self.authenticate(hash)
         if hash["username"].nil? or hash["password"].nil?
             raise ArgumentError, "Username/password cannot be nil"
@@ -21,6 +39,9 @@ class User
         user = User.where(:username => hash["username"]).first
         if user.nil?
             raise StandardError, "No such user found"
+        end
+        if not user.user_info.token.nil?
+            raise StandardError, "User has not activated"
         end
 
         if not user.old_password.nil?
