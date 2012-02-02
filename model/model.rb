@@ -52,6 +52,8 @@ class Spread < Sequel::Model(:spread)
 end
 
 class UserInfo < Sequel::Model(:user_info)
+    many_to_one :favorite_team, :class => Team, :key => :favorite_team_id, :primary_key => :id
+    many_to_one :hated_team, :class => Team, :key => :hated_team_id, :primary_key => :id
     self.db = $db_connection
 end
 
