@@ -11,12 +11,8 @@ class ScheduleController < Controller
 
     private
 
-    def current_season
-        2011
-    end
-
     def current_week_type
-        "post"
+        "REG"
     end
 
     def current_week_number

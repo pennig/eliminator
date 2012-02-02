@@ -2,6 +2,7 @@ class BetController < Controller
     def view(season,week_type,week_number,survival_pickem="survival",headsup_ats="h",regular_reverse="reg")
         mode = parse_modes(survival_pickem,headsup_ats,regular_reverse)
         @title = "View Bets"
+        @season = season
 
         @bets = VBetWithUserTeamResult.where(
             :season => season,

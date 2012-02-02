@@ -12,6 +12,10 @@ class Controller < Ramaze::Controller
     def login_required
         call UserController.r(:login) unless logged_in?
     end
+
+    def current_season
+        2011
+    end
 end
 
 # Here you can require all your other controllers. Note that if you have multiple
@@ -27,4 +31,5 @@ require __DIR__('schedule')
 require __DIR__('group')
 require __DIR__('team')
 require __DIR__('game')
+require __DIR__('ajax_game')
 require __DIR__('bet')

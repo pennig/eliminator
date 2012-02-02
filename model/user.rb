@@ -40,7 +40,7 @@ class User
         if user.nil?
             raise StandardError, "No such user found"
         end
-        if not user.user_info.token.nil?
+        if not user.active
             raise StandardError, "User has not activated"
         end
 

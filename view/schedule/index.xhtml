@@ -8,7 +8,7 @@
         <td>#{week.home_score}</td>
         <td <?r if week.home_score < week.away_score ?>style="font-weight:bold" <?r end ?>><a href="/team/info/#{week.season}/#{week.away_team.short_name}">#{week.away_team.name}</a></td>
         <td>#{week.away_score}</td>
-        <td><a href="/game/#{week.game_id}">Game Stats</a></td>
+        <td><a href="/game/info/#{week.game_id}">Game Stats</a></td>
     </tr>
     <?r end ?>
 </table>

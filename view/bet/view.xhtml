@@ -1,13 +1,41 @@
-<table>
-<tr><th>User</th><th>Team</th></tr>
-<?r @bets.each do |bet|
+<table class="table table-striped">
+<tr><th>User</th><th>Team</th><th>User</th><th>Team</th></tr>
+<?r
+    i = 0
+    @bets.each do |bet|
         if bet.complete? and bet.correct?
-            style = "style='font-weight:bold'"
+            style = "background-color:blue"
+        elsif bet.complete? and not bet.correct?
+            style = "background-color:red"
         end
+        i += 1
 ?>
+<?r if i.odd? ?>
 <tr>
+<?r end ?>
     <td #{style}><a href="/user/info/#{bet.username}">#{bet.username}</a></td>
-    <td #{style}><a href="/team/info/#{bet.short_name}"> <img src="/images/teams-sm/#{bet.short_name.downcase}.png"> #{bet.team_name} </a></td>
+    <td #{style}><a class="team" game_id="#{bet.game_id}" href="/team/info/#{@season}/#{bet.short_name}"> <img src="/images/teams-sm/#{bet.short_name.downcase}.png"> #{bet.team_name} </a></td>
+<?r if i.even? ?>
 </tr>
 <?r end ?>
+<?r end ?>
 </table>
+<script>
+$(document).ready(function() {
+    //this whole thing is a crappy hack. replace it when we do the UI for real
+    $(".team").hover(function() {
+        if ( $(this).attr("data-content") ) {
+            $(this).popover("show");
+        } else {
+            console.log('querying');
+            var el = this;
+            var game_id = $(this).attr("game_id");
+            $.get("/ajax/game/bet_popover/"+game_id,function(response) {
+                $(el).attr("data-content",response).popover("show");
+            },"html");
+        }
+    },function() {
+        $(this).popover("hide");
+    });
+});
+</script>
