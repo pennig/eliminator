@@ -14,7 +14,7 @@ class TeamController < Controller
         @season = season
     end
 
-    def info(season=2011,team_identifier)
+    def info(season=2011,team_identifier=nil)
         if team_identifier.to_i > 0
             @team = Team[team_identifier]
         else
