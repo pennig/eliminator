@@ -10,11 +10,15 @@ class Controller < Ramaze::Controller
     helper :stack
 
     def login_required
-        call UserController.r(:login) unless logged_in?
+        call RegisterController.r(:login) unless logged_in?
     end
 
     def current_season
         2011
+    end
+
+    def controller_name
+        self.class.name.gsub("Controller", "").downcase.to_sym
     end
 end
 
@@ -26,6 +30,7 @@ end
 #  end
 #
 require __DIR__('main')
+require __DIR__('register')
 require __DIR__('user')
 require __DIR__('schedule')
 require __DIR__('group')
