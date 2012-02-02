@@ -3,6 +3,7 @@ class User
 
     one_to_many :owned_groups, :class => Group, :key => :owner_id
     many_to_many :joined_groups, :join_table => :group_members, :class => Group, :left_key => :user_id, :right_key => :group_id
+    one_to_one :user_info, :class => UserInfo, :key => :user_id
 
     def password
         @password ||= Password.new(self.passwd)
