@@ -20,7 +20,7 @@ class UserController < Controller
 
     def info(user_identifier)
         if user_identifier.to_i > 0
-            @user = User[user_identifier.to_i].first
+            @user = User[user_identifier.to_i]
         else
             @user = User.where(:username => user_identifier).first
         end
