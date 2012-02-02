@@ -16,6 +16,7 @@ class UserController < Controller
 
     def profile
         login_required
+        @title = user.username
     end
 
     def info(user_identifier)
@@ -29,11 +30,36 @@ class UserController < Controller
     def register
         @title = "Register"
         if request.post?
-            token = register_user
-            welcome_email = Mailer.welcome_email(request[:email],token)
-            puts welcome_email.inspect
-            welcome_email.deliver
+            @user = User.new(
+                :username => request[:username],
+                :password => request[:password],
+                :email => request[:email],
+                :created_at => Time.now
+            )
+            errors = @user.validate
+            if request[:password].nil? or request[:password].empty?
+                errors << "Password is required"
+            end
+            if request[:password] != request[:repeat_password]
+                errors << "Passwords don't match"
+            end
+            if not errors.empty?
+                flash[:message] = errors[0]
+            else
+                flash.delete(:message)
+                token = register_user(@user)
+                welcome_email = Mailer.welcome_email(request[:email],token)
+                puts welcome_email.inspect
+                welcome_email.deliver
+                redirect UserController.r(:registered)
+            end
+        else
+            @user = OpenStruct.new
         end
+    end
+
+    def registered
+        @title = "Awaiting Activation"
     end
 
     def activate(token)
@@ -44,27 +70,23 @@ class UserController < Controller
             user = User[user_info[:user_id]]
             user.active = 1
             user.save
+            flash[:message] = "Account Activated!"
             answer "/user/profile"
         else
-            puts "invalid token"
+            @title = "Activation Failed"
         end
     end
 
     private
 
-    def register_user
+    def register_user(new_user)
         token = Guid.new.to_s
 
         $db_connection.transaction do
-            user = User.create(
-                :username => request[:username],
-                :password => request[:password],
-                :email => request[:email],
-                :created_at => Time.now
-            )
+            new_user.save
 
             user_info = UserInfo.create(
-                :user_id => user.id,
+                :user_id => new_user.id,
                 :token => token
             )
         end
