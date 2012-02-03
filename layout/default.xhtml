@@ -45,7 +45,7 @@
                             <?r if @season ?>
                             <?r
                                 @season_regexp = Regexp.new(@season_path.gsub("/","\\/")+"?[0-9]{4}?\/?")
-                                @sliced_path = request.env["REQUEST_PATH"].sub(@season_regexp,"")
+                                @sliced_path = (request.env["SCRIPT_NAME"]+request.env["PATH_INFO"]).sub(@season_regexp,"")
 
                             ?>
                             <ul class="nav pull-right">
