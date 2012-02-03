@@ -1,5 +1,46 @@
 <h2>#{@user.username}</h2>
 <h4>Joined: #{@user.created_at}</h4>
-<p>Favorite Team: #{@user.user_info.favorite_team.name}</p>
-<p>Hated Team: #{@user.user_info.hated_team.name}</p>
-<p>Betting stats needed</p>
+<p>Favorite Team: <a href="/team/info/#{current_season}/#{@user.user_info.favorite_team.short_name}">#{@user.user_info.favorite_team.name}</a></p>
+<p>Hated Team: <a href="/team/info/#{current_season}/#{@user.user_info.hated_team.short_name}">#{@user.user_info.hated_team.name}</a></p>
+<h3>Betting Record</h3>
+<div class="row span12">
+<?r i = 0 ?>
+<?r @bet_record.each do |bet_season|
+i += 1
+if i.odd?  ?>
+<div class="row">
+<?r end ?>
+    <table class="table table-striped span6">
+        <thead><tr><th>#{bet_season.season}</th></tr></thead>
+        <tbody>
+            <tr>
+                <td>Eliminator / Heads Up / Regular</td><td>#{bet_season.s_h_reg_won.to_i} - #{bet_season.s_h_reg_lost.to_i}</td>
+            </tr>
+            <tr>
+                <td>Eliminator / Heads Up / Reverse</td><td>#{bet_season.s_h_rev_won.to_i} - #{bet_season.s_h_rev_lost.to_i}</td>
+            </tr>
+            <tr>
+                <td>Eliminator / Against The Spread / Regular</td><td>#{bet_season.s_a_reg_won.to_i} - #{bet_season.s_a_reg_lost.to_i}</td>
+            </tr>
+            <tr>
+                <td>Eliminator / Against The Spread / Reverse</td><td>#{bet_season.s_a_rev_won.to_i} - #{bet_season.s_a_rev_lost.to_i}</td>
+            </tr>
+            <tr>
+                <td>Pickem / Heads Up / Regular</td><td>#{bet_season.p_h_reg_won.to_i} - #{bet_season.p_h_reg_lost.to_i}</td>
+            </tr>
+            <tr>
+                <td>Pickem / Heads Up / Reverse</td><td>#{bet_season.p_h_rev_won.to_i} - #{bet_season.p_h_rev_lost.to_i}</td>
+            </tr>
+            <tr>
+                <td>Pickem / Against The Spread / Regular</td><td>#{bet_season.p_a_reg_won.to_i} - #{bet_season.p_a_reg_lost.to_i} - #{bet_season.p_a_reg_push.to_i}</td>
+            </tr>
+            <tr>
+                <td>Pickem / Against The Spread / Reverse</td><td>#{bet_season.p_a_rev_won.to_i} - #{bet_season.p_a_rev_lost.to_i} - #{bet_season.p_a_rev_push.to_i}</td>
+            </tr>
+        </tbody>
+    </table>
+<?r if i.even?  ?>
+</div>
+<?r end ?>
+<?r end ?>
+</div>

@@ -123,3 +123,7 @@ class VBetWithUserTeamResult < Sequel::Model(:v_bets_with_users_teams_results)
     end
 
 end
+
+class VBetRecord < Sequel::Model(:v_bet_records)
+    self.db = $db_connection
+end
