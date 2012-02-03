@@ -1,14 +1,31 @@
-<table>
-    <tr><th>Week</th><th>Game Time</th><th>Home Team</th><th>Score</th><th>Away Team</th><th>Score</th></tr>
-    <?r @schedule.each do |week| ?>
-    <tr>
-        <td><a href="/schedule/#{week.season}/#{week.week_type}/#{week.week_number}">#{week.week_number}</a></td>
-        <td>#{week.game_time}</td>
-        <td <?r if week.home_score > week.away_score ?>style="font-weight:bold" <?r end ?>><a href="/team/info/#{week.season}/#{week.home_team.short_name}">#{week.home_team.name}</a></td>
-        <td>#{week.home_score}</td>
-        <td <?r if week.home_score < week.away_score ?>style="font-weight:bold" <?r end ?>><a href="/team/info/#{week.season}/#{week.away_team.short_name}">#{week.away_team.name}</a></td>
-        <td>#{week.away_score}</td>
-        <td><a href="/game/info/#{week.game_id}">Game Stats</a></td>
-    </tr>
+<?r i = 0
+@schedule.each do |matchup|
+    i += 1
+    if i.odd? ?>
+        <!--td><a href="/schedule/#{matchup.season}/#{matchup.week_type}/#{matchup.week_number}">#{matchup.week_number}</a></td-->
+    <div class="row">
     <?r end ?>
-</table>
+        <div class="span4 well">
+            <div style="width:90%;float:left;margin-bottom:10px">
+                <img src="/images/teams-xl-clipped/#{matchup.away_team.short_name}.png" style="float:left" />
+                <div style="float:left;padding-top:5px">
+                <span style="font-size:16px">#{matchup.away_team.name}</span>
+                <p style="color:#555"> 0 - 0 </p>
+                </div>
+            </div>
+            <div style="float:right;font-size:20px;padding-top:5px">#{matchup.away_score}</div>
+            <div style="clear:both;width:90%;float:left">
+                <img src="/images/teams-xl-clipped/#{matchup.home_team.short_name}.png" style="float:left" />
+                <div style="float:left;padding-top:5px">
+                <span style="font-size:16px">#{matchup.home_team.name}</span>
+                <p style="color:#555"> 0 - 0 </p>
+                </div>
+            </div>
+            <div style="float:right;font-size:20px;padding-top:5px">#{matchup.home_score}</div>
+            <div style="clear:both;float:right"><a href="/game/info/#{matchup.game_id}">Game Stats</a></div>
+            <div style="float:left;padding-right:50px;font-weight:bold">#{matchup.status}</div>
+        </div>
+    <?r if i.even? ?>
+    </div>
+    <?r end ?>
+<?r end ?>

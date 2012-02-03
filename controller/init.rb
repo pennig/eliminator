@@ -9,6 +9,10 @@ class Controller < Ramaze::Controller
     engine :etanni
     helper :stack
 
+    def initialize
+        @title = "SAS Eliminator"
+    end
+
     def login_required
         call RegisterController.r(:login) unless logged_in?
     end
