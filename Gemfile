@@ -6,3 +6,8 @@ gem "sequel"
 gem "rake"
 gem "actionmailer"
 gem "guid"
+gem "tzinfo"
+
+group :development do
+    gem "rspec"
+end
