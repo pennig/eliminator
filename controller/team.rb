@@ -1,5 +1,8 @@
 class TeamController < Controller
     def index(season=2011)
+        @season = season
+        @season_path = build_path
+
         @start_time = Time.now
         @afc = {}
         @nfc = {}
@@ -11,10 +14,12 @@ class TeamController < Controller
         @nfc["west"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "West").order(:won.desc,:lost.asc,:tied.desc).all
         @nfc["north"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "North").order(:won.desc,:lost.asc,:tied.desc).all
         @nfc["south"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "South").order(:won.desc,:lost.asc,:tied.desc).all
-        @season = season
     end
 
     def info(season=2011,team_identifier=nil)
+        @season = season
+        @season_path = build_path
+
         if team_identifier.to_i > 0
             @team = Team[team_identifier]
         else

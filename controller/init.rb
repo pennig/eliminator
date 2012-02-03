@@ -20,6 +20,24 @@ class Controller < Ramaze::Controller
     def controller_name
         self.class.name.gsub("Controller", "").downcase.to_sym
     end
+
+    def build_path
+        method_invoked = parse_caller(caller(1).first).last
+        if method_invoked == "index"
+            "/#{controller_name}/"
+        else
+            "/#{controller_name}/#{method_invoked}/"
+        end
+    end
+
+    def parse_caller(at)
+        if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
+            file   = Regexp.last_match[1]
+            line   = Regexp.last_match[2].to_i
+            method = Regexp.last_match[3]
+            [file, line, method]
+        end
+    end
 end
 
 # Here you can require all your other controllers. Note that if you have multiple

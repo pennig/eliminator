@@ -42,6 +42,25 @@
                                 <a href="/register/login">Login</a>
                             </li>
                             <?r end ?>
+                            <?r if @season ?>
+                            <?r
+                                @season_regexp = Regexp.new(@season_path.gsub("/","\\/")+"?[0-9]{4}?\/?")
+                                @sliced_path = request.env["REQUEST_PATH"].sub(@season_regexp,"")
+
+                            ?>
+                            <ul class="nav pull-right">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">#{@season}<b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <?r
+                                        [2004,2005,2006,2007,2008,2009,2010,2011].each do |season|
+                                        ?>
+                                        <li><a href="#{@season_path+season.to_s+"/"+@sliced_path}">#{season}</a></li>
+                                        <?r end ?>
+                                    </ul>
+                                </li>
+                            </ul>
+                            <?r end ?>
                         </ul>
                     </div>
                 </div>

@@ -3,6 +3,7 @@ class BetController < Controller
         mode = parse_modes(survival_pickem,headsup_ats,regular_reverse)
         @title = "View Bets"
         @season = season
+        @season_path = build_path
 
         @bets = VBetWithUserTeamResult.where(
             :season => season,
