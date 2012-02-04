@@ -7,6 +7,7 @@ gem "rake"
 gem "actionmailer"
 gem "guid"
 gem "tzinfo"
+gem "nokogiri"
 
 group :development do
     gem "rspec"
