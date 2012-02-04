@@ -20,6 +20,25 @@ class BetController < Controller
         @title = "Make Bet"
     end
 
+    def place(bet_set_id,week_type,week_number,game_id,team_id)
+        login_required
+
+
+        bet = Bet.new(
+            :created_at => Time.now,
+            :updated_at => Time.now,
+            :user_id => user.id,
+            :season => current_season,
+            :week_number => week_number,
+            :week_type => week_type,
+            :team_id => team_id,
+            :bet_set_id => bet_set_id
+        )
+        bet.validate(user,current_season,current_week_type,current_week_number)
+        bet.save
+
+    end
+
     private
     def parse_modes(survival_pickem,headsup_ats,regular_reverse)
         if survival_pickem == "survival"
