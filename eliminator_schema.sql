@@ -162,6 +162,7 @@ CREATE TABLE `game_stats` (
   `sack_yards_lost` mediumint(9) DEFAULT NULL,
   `interceptions_thrown` smallint(6) DEFAULT NULL,
   `interception_return_yards` smallint(6) DEFAULT NULL,
+  `interception_returns` smallint(6) DEFAULT NULL,
   `rushing_1st_downs` smallint(6) DEFAULT NULL,
   `passing_1st_downs` smallint(6) DEFAULT NULL,
   `penalty_1st_downs` smallint(6) DEFAULT NULL,
@@ -170,10 +171,16 @@ CREATE TABLE `game_stats` (
   `fourth_down_attempts` smallint(6) DEFAULT NULL,
   `fourth_down_conversions` smallint(6) DEFAULT NULL,
   `punts` smallint(6) DEFAULT NULL,
+  `punts_blocked` tinyint(4) DEFAULT NULL,
   `punt_average_distance` float DEFAULT NULL,
+  `punt_net_average` float DEFAULT NULL,
   `punt_returns` smallint(6) DEFAULT NULL,
+  `punt_return_yards` smallint(6) DEFAULT NULL,
   `kickoffs` smallint(6) DEFAULT NULL,
+  `kickoffs_in_endzone` smallint(6) DEFAULT NULL,
+  `kickoffs_touchback` smallint(6) DEFAULT NULL,
   `kickoff_returns` smallint(6) DEFAULT NULL,
+  `kickoff_return_yards` smallint(6) DEFAULT NULL,
   `penalties` smallint(6) DEFAULT NULL,
   `penalty_yards` smallint(6) DEFAULT NULL,
   `fumbles` smallint(6) DEFAULT NULL,
@@ -184,8 +191,10 @@ CREATE TABLE `game_stats` (
   `other_tds` smallint(6) DEFAULT NULL,
   `xp_attempts` smallint(6) DEFAULT NULL,
   `xp_conversions` smallint(6) DEFAULT NULL,
+  `xp_blocked` smallint(6) DEFAULT NULL,
   `fg_attempts` smallint(6) DEFAULT NULL,
   `fg_conversions` smallint(6) DEFAULT NULL,
+  `fg_blocked` smallint(6) DEFAULT NULL,
   `goal_to_go_attempts` smallint(6) DEFAULT NULL,
   `goal_to_go_successes` smallint(6) DEFAULT NULL,
   `red_zone_attempts` smallint(6) DEFAULT NULL,
@@ -199,6 +208,7 @@ CREATE TABLE `game_stats` (
   KEY `game_id` (`game_id`),
   KEY `team_id` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 
