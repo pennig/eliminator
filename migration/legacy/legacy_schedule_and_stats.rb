@@ -91,8 +91,6 @@ LegacyScheduleAndStats.each do |legacy_schedule|
         :red_zone_attempts => legacy_schedule.hredatt,
         :red_zone_successes => legacy_schedule.hredsuccess,
         :safeties => legacy_schedule.hsafety,
-        :total_drives => legacy_schedule.htotaldrives, #no longer available
-        :average_drive_start => legacy_schedule.hdrivestart, #no longer available
         :created_at => Time.now,
         :updated_at => Time.now
     )

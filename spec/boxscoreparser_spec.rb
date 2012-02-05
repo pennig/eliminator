@@ -7,7 +7,7 @@ describe BoxScoreParser do
     end
     it "parses and returns away stats properly" do
         parser = BoxScoreParser.new("2011111310")
-        stats = parser.build_stat_object("away")
+        stats = parser.stats_for("away")
         stats.turnovers.should == 2
         stats.rushing_yards.should == 133
         stats.rushing_attempts.should == 32
@@ -59,7 +59,7 @@ describe BoxScoreParser do
     end
     it "parses and returns home stats properly" do
         parser = BoxScoreParser.new("2011111310")
-        stats = parser.build_stat_object("home")
+        stats = parser.stats_for("home")
         stats.turnovers.should == 1
         stats.rushing_yards.should == 126
         stats.rushing_attempts.should == 30

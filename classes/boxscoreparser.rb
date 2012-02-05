@@ -5,8 +5,19 @@ require 'ostruct'
 class BoxScoreParser
     def initialize(game_id)
         raw_data = Net::HTTP.get(URI('http://www.nfl.com/widget/gc/2011/tabs/cat-post-boxscore?gameId='+game_id))
+        if raw_data.size < 1000
+            #sometimes NFL.com gives a 404 for no reason. wait and try one more time
+            sleep(5)
+            raw_data = Net::HTTP.get(URI('http://www.nfl.com/widget/gc/2011/tabs/cat-post-boxscore?gameId='+game_id))
+        end
         result = raw_data.scan(/<table width="100%" border="0" cellspacing="0" cellpadding="0" class="gc-box-score-table">.*?<\/table>/m)
-        processed_box_score = result[1].gsub(/<([A-Za-z]+)[^>]*>/,'<\1>')
+        begin
+            processed_box_score = result[1].gsub(/<([A-Za-z]+)[^>]*>/,'<\1>')
+        rescue => e
+            puts raw_data
+            puts result
+            raise e
+        end
         @box_score = Nokogiri::XML(processed_box_score)
     end
 
@@ -19,7 +30,7 @@ class BoxScoreParser
         @box_score.xpath("//tr[td/. ='#{stat}']")[0].children[node].children[0].to_s
     end
 
-    def build_stat_object(home_away)
+    def stats_for(home_away)
         game_stat = OpenStruct.new
         game_stat.turnovers = get_statistic("Pass Comp-Att-Int",home_away).split("-")[2].to_i + get_statistic("Fumbles (Number-Lost)",home_away).split("-")[1].to_i
         game_stat.rushing_yards = get_statistic("Net Yards Rushing",home_away).to_i
