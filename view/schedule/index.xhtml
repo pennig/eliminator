@@ -7,7 +7,7 @@
     <?r end ?>
         <div class="span4 well">
             <div style="width:90%;float:left;margin-bottom:10px">
-                <img src="/images/teams-xl-clipped/#{matchup.away_team.short_name}.png" style="float:left" />
+                <img src="/images/teams-xl-clipped/#{matchup.away_team.short_name.downcase}.png" style="float:left" />
                 <div style="float:left;padding-top:5px">
                 <span style="font-size:16px">#{matchup.away_team.name}</span>
                 <p style="color:#555"> 0 - 0 </p>
@@ -15,7 +15,7 @@
             </div>
             <div style="float:right;font-size:20px;padding-top:5px">#{matchup.away_score}</div>
             <div style="clear:both;width:90%;float:left">
-                <img src="/images/teams-xl-clipped/#{matchup.home_team.short_name}.png" style="float:left" />
+                <img src="/images/teams-xl-clipped/#{matchup.home_team.short_name.downcase}.png" style="float:left" />
                 <div style="float:left;padding-top:5px">
                 <span style="font-size:16px">#{matchup.home_team.name}</span>
                 <p style="color:#555"> 0 - 0 </p>
