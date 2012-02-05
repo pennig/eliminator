@@ -8,7 +8,7 @@
         <td> <a href="/team/info/#{@season}/#{team.short_name}">#{team.name}</a> </td>
         <td> #{team[:won].to_i} - #{team[:lost].to_i} - #{team[:tied].to_i} </td>
         <td> #{team["#{team.conference.downcase}_#{team.division.downcase}_won".to_sym].to_i} -  #{team["#{team.conference.downcase}_#{team.division.downcase}_lost".to_sym].to_i} - #{team["#{team.conference.downcase}_#{team.division.downcase}_tied".to_sym].to_i}</td>
-        <td>streak...</td>
+        <td>#{@streak[team[:id]][:streak]}</td>
     </tr>
     <?r end ?>
     <?r end ?>
@@ -22,7 +22,7 @@
         <td> <a href="/team/info/#{@season}/#{team.short_name}">#{team.name}</a> </td>
         <td> #{team[:won].to_i} - #{team[:lost].to_i} - #{team[:tied].to_i} </td>
         <td> #{team["#{team.conference.downcase}_#{team.division.downcase}_won".to_sym].to_i} -  #{team["#{team.conference.downcase}_#{team.division.downcase}_lost".to_sym].to_i} - #{team["#{team.conference.downcase}_#{team.division.downcase}_tied".to_sym].to_i}</td>
-        <td>streak...</td>
+        <td>#{@streak[team[:id]][:streak]}</td>
     </tr>
     <?r end ?>
     <?r end ?>

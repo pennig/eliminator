@@ -14,6 +14,7 @@ class TeamController < Controller
         @nfc["west"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "West").order(:won.desc,:lost.asc,:tied.desc).all
         @nfc["north"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "North").order(:won.desc,:lost.asc,:tied.desc).all
         @nfc["south"] = VTeamWithRecord.where(:season => season, :conference => "NFC", :division => "South").order(:won.desc,:lost.asc,:tied.desc).all
+        @streak = Team.streak(@season).to_hash(:team_id)
     end
 
     def info(season=2011,team_identifier=nil)
