@@ -1,5 +1,6 @@
 <h2>Teams</h2>
-<table style="width:48%;float:left;background-image: url(/images/vector/afc-o25.svg);background-repeat:no-repeat;background-position: 40% 40%">
+<div class="row">
+<table class="span6" style="background-image: url(/images/vector/afc-o25.svg);background-repeat:no-repeat;background-position: 40% 40%">
     <?r ["north","south","east","west"].each do |division| ?>
     <tr style="font-weight:bold"><td>#{division.capitalize}</td><td>Record</td><td>Division Record</td><td>Streak</td></tr>
     <?r @afc[division].each do |team| ?>
@@ -12,7 +13,7 @@
     <?r end ?>
     <?r end ?>
 </table>
-<table style="width:40%;float:left;background-image: url(/images/vector/nfc-o25.svg);background-repeat:no-repeat;background-position: 40% 40%">
+<table class="span6" style="background-image: url(/images/vector/nfc-o25.svg);background-repeat:no-repeat;background-position: 40% 40%">
     <?r ["north","south","east","west"].each do |division| ?>
     <tr style="font-weight:bold"><td>#{division.capitalize}</td><td>Record</td><td>Division Record</td><td>Streak</td></tr>
     <?r @nfc[division].each do |team| ?>
@@ -25,6 +26,7 @@
     <?r end ?>
     <?r end ?>
 </table>
+</div>
 <p style="clear:both;padding-top:20px">
     #{(Time.now - @start_time)*1000}
     ms
