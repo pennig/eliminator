@@ -11,31 +11,31 @@ if i.odd?  ?>
 <div class="row">
 <?r end ?>
     <table class="table table-striped span6">
-        <thead><tr><th>#{bet_season.season}</th></tr></thead>
+        <thead><tr><th>#{bet_season[:season]}</th></tr></thead>
         <tbody>
             <tr>
-                <td>Eliminator / Heads Up / Regular</td><td>#{bet_season.s_h_reg_won.to_i} - #{bet_season.s_h_reg_lost.to_i}</td>
+                <td>Eliminator / Heads Up / Regular</td><td>#{bet_season[:s_h_reg_won].to_i} - #{bet_season[:s_h_reg_lost].to_i}</td>
             </tr>
             <tr>
-                <td>Eliminator / Heads Up / Reverse</td><td>#{bet_season.s_h_rev_won.to_i} - #{bet_season.s_h_rev_lost.to_i}</td>
+                <td>Eliminator / Heads Up / Reverse</td><td>#{bet_season[:s_h_rev_won].to_i} - #{bet_season[:s_h_rev_lost].to_i}</td>
             </tr>
             <tr>
-                <td>Eliminator / Against The Spread / Regular</td><td>#{bet_season.s_a_reg_won.to_i} - #{bet_season.s_a_reg_lost.to_i}</td>
+                <td>Eliminator / Against The Spread / Regular</td><td>#{bet_season[:s_a_reg_won].to_i} - #{bet_season[:s_a_reg_lost].to_i}</td>
             </tr>
             <tr>
-                <td>Eliminator / Against The Spread / Reverse</td><td>#{bet_season.s_a_rev_won.to_i} - #{bet_season.s_a_rev_lost.to_i}</td>
+                <td>Eliminator / Against The Spread / Reverse</td><td>#{bet_season[:s_a_rev_won].to_i} - #{bet_season[:s_a_rev_lost].to_i}</td>
             </tr>
             <tr>
-                <td>Pickem / Heads Up / Regular</td><td>#{bet_season.p_h_reg_won.to_i} - #{bet_season.p_h_reg_lost.to_i}</td>
+                <td>Pickem / Heads Up / Regular</td><td>#{bet_season[:p_h_reg_won].to_i} - #{bet_season[:p_h_reg_lost].to_i}</td>
             </tr>
             <tr>
-                <td>Pickem / Heads Up / Reverse</td><td>#{bet_season.p_h_rev_won.to_i} - #{bet_season.p_h_rev_lost.to_i}</td>
+                <td>Pickem / Heads Up / Reverse</td><td>#{bet_season[:p_h_rev_won].to_i} - #{bet_season[:p_h_rev_lost].to_i}</td>
             </tr>
             <tr>
-                <td>Pickem / Against The Spread / Regular</td><td>#{bet_season.p_a_reg_won.to_i} - #{bet_season.p_a_reg_lost.to_i} - #{bet_season.p_a_reg_push.to_i}</td>
+                <td>Pickem / Against The Spread / Regular</td><td>#{bet_season[:p_a_reg_won].to_i} - #{bet_season[:p_a_reg_lost].to_i} - #{bet_season[:p_a_reg_push].to_i}</td>
             </tr>
             <tr>
-                <td>Pickem / Against The Spread / Reverse</td><td>#{bet_season.p_a_rev_won.to_i} - #{bet_season.p_a_rev_lost.to_i} - #{bet_season.p_a_rev_push.to_i}</td>
+                <td>Pickem / Against The Spread / Reverse</td><td>#{bet_season[:p_a_rev_won].to_i} - #{bet_season[:p_a_rev_lost].to_i} - #{bet_season[:p_a_rev_push].to_i}</td>
             </tr>
         </tbody>
     </table>
@@ -44,3 +44,6 @@ if i.odd?  ?>
 <?r end ?>
 <?r end ?>
 </div>
+<p>
+    #{(Time.now - @start_time)*1000}
+</p>

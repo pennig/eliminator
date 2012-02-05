@@ -67,4 +67,41 @@ class User
             return false
         end
     end
+
+    #gets the user record very quickly. much faster than the view for a single user
+    def record(season=nil)
+        sql = "select
+           b.user_id,
+           b.season,
+           sum(case when ((gr.status = 'FINAL') and (gr.winning_team_id = b.team_id) and (b.survival_pickem = 0) and (b.headsup_ats = 0) and (b.regular_reverse = 0)) then 1 else 0 end) AS s_h_reg_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.winning_team_id <> b.team_id) or isnull(gr.winning_team_id)) and (b.survival_pickem = 0) and (b.headsup_ats = 0) and (b.regular_reverse = 0)) then 1 else 0 end) AS s_h_reg_lost,
+           sum(case when ((gr.status = 'FINAL') and (gr.winning_team_id is not null) and (gr.winning_team_id <> b.team_id) and (b.survival_pickem = 0) and (b.headsup_ats = 0) and (b.regular_reverse = 1)) then 1 else 0 end) AS s_h_rev_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.winning_team_id = b.team_id) or isnull(gr.winning_team_id)) and (b.survival_pickem = 0) and (b.headsup_ats = 0) and (b.regular_reverse = 1)) then 1 else 0 end) AS s_h_rev_lost,
+           sum(case when ((gr.status = 'FINAL') and (gr.winning_team_id = b.team_id) and (b.survival_pickem = 1) and (b.headsup_ats = 0) and (b.regular_reverse = 0)) then 1 else 0 end) AS p_h_reg_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.winning_team_id <> b.team_id) or isnull(gr.winning_team_id)) and (b.survival_pickem = 1) and (b.headsup_ats = 0) and (b.regular_reverse = 0)) then 1 else 0 end) AS p_h_reg_lost,
+           sum(case when ((gr.status = 'FINAL') and (gr.winning_team_id is not null) and (gr.winning_team_id <> b.team_id) and (b.survival_pickem = 1) and (b.headsup_ats = 0) and (b.regular_reverse = 1)) then 1 else 0 end) AS p_h_rev_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.winning_team_id = b.team_id) or isnull(gr.winning_team_id)) and (b.survival_pickem = 1) and (b.headsup_ats = 0) and (b.regular_reverse = 1)) then 1 else 0 end) AS p_h_rev_lost,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) < s.spread) and (b.survival_pickem = 0) and (b.headsup_ats = 1) and (b.regular_reverse = 0)) then 1 else 0 end) AS s_a_reg_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) > s.spread) and (b.survival_pickem = 0) and (b.headsup_ats = 1) and (b.regular_reverse = 0)) then 1 else 0 end) AS s_a_reg_lost,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) = s.spread) and (b.survival_pickem = 0) and (b.headsup_ats = 1) and (b.regular_reverse = 0)) then 1 else 0 end) AS s_a_reg_push,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) > s.spread) and (b.survival_pickem = 0) and (b.headsup_ats = 1) and (b.regular_reverse = 1)) then 1 else 0 end) AS s_a_rev_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) < s.spread) and (b.survival_pickem = 0) and (b.headsup_ats = 1) and (b.regular_reverse = 1)) then 1 else 0 end) AS s_a_rev_lost,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) = s.spread) and (b.survival_pickem = 0) and (b.headsup_ats = 1) and (b.regular_reverse = 1)) then 1 else 0 end) AS s_a_rev_push,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) < s.spread) and (b.survival_pickem = 1) and (b.headsup_ats = 1) and (b.regular_reverse = 0)) then 1 else 0 end) AS p_a_reg_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) > s.spread) and (b.survival_pickem = 1) and (b.headsup_ats = 1) and (b.regular_reverse = 0)) then 1 else 0 end) AS p_a_reg_lost,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) = s.spread) and (b.survival_pickem = 1) and (b.headsup_ats = 1) and (b.regular_reverse = 0)) then 1 else 0 end) AS p_a_reg_push,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) > s.spread) and (b.survival_pickem = 1) and (b.headsup_ats = 1) and (b.regular_reverse = 1)) then 1 else 0 end) AS p_a_rev_won,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) < s.spread) and (b.survival_pickem = 1) and (b.headsup_ats = 1) and (b.regular_reverse = 1)) then 1 else 0 end) AS p_a_rev_lost,
+           sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) = s.spread) and (b.survival_pickem = 1) and (b.headsup_ats = 1) and (b.regular_reverse = 1)) then 1 else 0 end) AS p_a_rev_push
+        from bets b
+        join game_results gr on gr.game_id = b.game_id
+        join spread s on b.spread_id = s.id
+        where user_id = ?"
+        if season.nil?
+            sql += " group by season"
+        else
+            sql += " and season = ?"
+        end
+        self.db[sql,self.id,season]
+    end
 end
