@@ -1,3 +1,8 @@
+<style>
+    #stats-list th.sort i.icon-sort-order{background-position:-313px -119px;}
+    #stats-list th.sort.desc i.icon-sort-order{background-position:-313px -119px;}
+    #stats-list th.sort.asc i.icon-sort-order{background-position:-288px -120px;}
+</style>
 <ul class="nav nav-pills">
     <li #{"class=\"active\"" if @stat_type == "offense"}>
         <a href="/statistics/offense/#{@season}">Offense</a>
@@ -6,16 +11,57 @@
         <a href="/statistics/defense/#{@season}">Defense</a>
     </li>
 </ul>
+<ul class="nav nav-pills filters">
+    <li class="active">
+        <a href="#" id="filter-clear">All</a>
+    </li>
+    <li>
+        <a href="#" id="filter-afc">AFC</a>
+    </li>
+    <li>
+        <a href="#" id="filter-nfc">NFC</a>
+    </li>
+</ul>
+<ul class="nav nav-pills afc-divisions" style="display:none">
+    <li>
+        <a href="#" id="filter-afc-north">AFC North</a>
+    </li>
+    <li>
+        <a href="#" id="filter-afc-south">AFC South</a>
+    </li>
+    <li>
+        <a href="#" id="filter-afc-east">AFC East</a>
+    </li>
+    <li>
+        <a href="#" id="filter-afc-west">AFC West</a>
+    </li>
+</ul>
+<ul class="nav nav-pills nfc-divisions" style="display:none">
+    <li>
+        <a href="#" id="filter-nfc-north">NFC North</a>
+    </li>
+    <li>
+        <a href="#" id="filter-nfc-south">NFC South</a>
+    </li>
+    <li>
+        <a href="#" id="filter-nfc-east">NFC East</a>
+    </li>
+    <li>
+        <a href="#" id="filter-nfc-west">NFC West</a>
+    </li>
+</ul>
+
+
 <table class="table table-striped" id="stats-list">
     <thead>
         <tr>
             <th>Rank</th>
             <th>Team</th>
-            <th class="sort" data-sort="points">Points Scored</th>
-            <th class="sort" data-sort="total-yards">Total Yards</th>
-            <th class="sort" data-sort="passing">Passing</th>
-            <th class="sort" data-sort="rushing">Rushing</th>
-            <th class="sort" data-sort="turnovers">Turnovers</th>
+            <th class="sort" data-sort="points">Points Scored <i class="icon-sort-order"></i></th>
+            <th class="sort" data-sort="total-yards">Total Yards <i class="icon-sort-order"></i></th>
+            <th class="sort" data-sort="passing">Passing <i class="icon-sort-order"></i></th>
+            <th class="sort" data-sort="rushing">Rushing <i class="icon-sort-order"></i></th>
+            <th class="sort" data-sort="turnovers">Turnovers <i class="icon-sort-order"></i></th>
         </tr>
     </thead>
     <tbody class="list">
@@ -33,16 +79,164 @@
             <td class="passing">#{team_stats.avg_passing_yards.round(1)} (#{team_stats.total_passing_yards.to_i})</td>
             <td class="rushing">#{team_stats.avg_rushing_yards.round(1)} (#{team_stats.total_rushing_yards.to_i})</td>
             <td class="turnovers">#{team_stats.avg_turnovers.round(1)} (#{team_stats.total_turnovers.to_i})</td>
+            <td class="conference" style="display:none">#{team.conference}</td>
+            <td class="division" style="display:none">#{team.division}</td>
         </tr>
         <?r end ?>
     </tbody>
 </table>
 <script>
+var statsList;
 $(document).ready(function() {
     var options = {
-        valueNames: [ 'points', 'total-yards', 'passing', 'rushing', 'turnovers' ]
+        valueNames: [ 'points', 'total-yards', 'passing', 'rushing', 'turnovers', 'conference', 'division' ]
     };
 
-    var statsList = new List('stats-list', options);
+    statsList = new List('stats-list', options);
+    $('#filter-clear').click(function(event) {
+        event.preventDefault();
+        $('ul.nfc-divisions,ul.afc-divisions').hide();
+        $("ul.filters,ul.nfc-divisions,ul.afc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            return true;
+        });
+        return false;
+    });
+    $('#filter-afc').click(function(event) {
+        event.preventDefault();
+        $("ul.filters,ul.afc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        $('ul.nfc-divisions').hide();
+        $('ul.afc-divisions').show();
+        statsList.filter(function(values) {
+            if (values.conference == "AFC") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-nfc').click(function(event) {
+        event.preventDefault();
+        $("ul.filters,ul.nfc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        $('ul.nfc-divisions').show();
+        $('ul.afc-divisions').hide();
+        statsList.filter(function(values) {
+            if (values.conference == "NFC") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-afc-north').click(function(event) {
+        event.preventDefault();
+        $("ul.afc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "AFC" && values.division == "North") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-afc-south').click(function(event) {
+        event.preventDefault();
+        $("ul.afc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "AFC" && values.division == "South") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-afc-east').click(function(event) {
+        event.preventDefault();
+        $("ul.afc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "AFC" && values.division == "East") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-afc-west').click(function(event) {
+        event.preventDefault();
+        $("ul.afc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "AFC" && values.division == "West") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-nfc-north').click(function(event) {
+        event.preventDefault();
+        $("ul.nfc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "NFC" && values.division == "North") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-nfc-south').click(function(event) {
+        event.preventDefault();
+        $("ul.nfc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "NFC" && values.division == "South") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-nfc-east').click(function(event) {
+        event.preventDefault();
+        $("ul.nfc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "NFC" && values.division == "East") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+    $('#filter-nfc-west').click(function(event) {
+        event.preventDefault();
+        $("ul.nfc-divisions").find(".active").removeClass("active");
+        $(this).parent().addClass("active");
+        statsList.filter(function(values) {
+            if (values.conference == "NFC" && values.division == "West") {
+                return true;
+            } else {
+                return false;
+            }
+        });
+        return false;
+    });
+
 });
 </script>
