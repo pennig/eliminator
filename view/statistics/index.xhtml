@@ -27,7 +27,7 @@
         ?>
         <tr>
             <td>#{i}</td>
-            <td><img src="/images/teams-sm/#{team.short_name.downcase}.png" style="vertical-align:middle"> <a href="/team/#{@season}/#{team.short_name}">#{team.name}</a></td>
+            <td><img src="/images/teams-sm/#{team.short_name.downcase}.png" style="vertical-align:middle"> <a href="/team/info/#{@season}/#{team.short_name}">#{team.name}</a></td>
             <td class="points">#{team_stats.avg_points.round(1)} (#{team_stats.total_points.to_i})</td>
             <td class="total-yards">#{(team_stats.avg_passing_yards + team_stats.avg_rushing_yards).round(1)} (#{team_stats.total_passing_yards.to_i + team_stats.total_rushing_yards.to_i})</td>
             <td class="passing">#{team_stats.avg_passing_yards.round(1)} (#{team_stats.total_passing_yards.to_i})</td>
