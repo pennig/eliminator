@@ -32,7 +32,7 @@
                                 <a href="/statistics/offense/#{@season}">Statistics</a>
                             </li>
                             <li class="#{"active" if controller_name == :bet}">
-                                <a href="#">Bets</a>
+                                <a href="/bet/view/#{@season || current_season}/REG/1/survival/h/reg">Bets</a>
                             </li>
                             <li class="#{"active" if controller_name == :group}">
                                 <a href="/group">Groups</a>
