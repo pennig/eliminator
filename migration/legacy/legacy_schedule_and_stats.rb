@@ -52,6 +52,7 @@ LegacyScheduleAndStats.each do |legacy_schedule|
     home_game_stats = GameStats.create(
         :game_id => generated_game_id,
         :team_id => legacy_schedule.home,
+        :points => legacy_schedule.homescore,
         :turnovers => legacy_schedule.hturnover,
         :rushing_yards => legacy_schedule.hrush,
         :rushing_attempts => legacy_schedule.hrushes,
@@ -99,6 +100,7 @@ LegacyScheduleAndStats.each do |legacy_schedule|
     away_game_stats = GameStats.create(
         :game_id => generated_game_id,
         :team_id => legacy_schedule.opponent,
+        :points => legacy_schedule.oppscore,
         :turnovers => legacy_schedule.oturnover,
         :rushing_yards => legacy_schedule.orush,
         :rushing_attempts => legacy_schedule.orushes,
@@ -138,8 +140,6 @@ LegacyScheduleAndStats.each do |legacy_schedule|
         :red_zone_attempts => legacy_schedule.oredatt,
         :red_zone_successes => legacy_schedule.oredsuccess,
         :safeties => legacy_schedule.osafety,
-        :total_drives => legacy_schedule.ototaldrives, #no longer available
-        :average_drive_start => legacy_schedule.odrivestart, #no longer available
         :created_at => Time.now,
         :updated_at => Time.now
     )

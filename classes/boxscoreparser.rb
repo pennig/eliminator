@@ -33,6 +33,7 @@ class BoxScoreParser
     def stats_for(home_away)
         game_stat = OpenStruct.new
         game_stat.turnovers = get_statistic("Pass Comp-Att-Int",home_away).split("-")[2].to_i + get_statistic("Fumbles (Number-Lost)",home_away).split("-")[1].to_i
+        game_stat.points = get_statistic("Final Score",home_away).to_i
         game_stat.rushing_yards = get_statistic("Net Yards Rushing",home_away).to_i
         game_stat.rushing_attempts = get_statistic("Total Rushing Plays",home_away).to_i
         game_stat.passing_yards = get_statistic("Net Yards Passing",home_away).to_i
