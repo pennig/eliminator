@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.18)
 # Database: eliminator
-# Generation Time: 2012-02-03 21:16:07 +0000
+# Generation Time: 2012-02-06 02:10:26 +0000
 # ************************************************************
 
 
@@ -152,6 +152,7 @@ CREATE TABLE `game_stats` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `game_id` varchar(255) DEFAULT NULL,
   `team_id` tinyint(4) DEFAULT NULL,
+  `points` smallint(6) DEFAULT NULL,
   `turnovers` smallint(4) DEFAULT NULL,
   `rushing_yards` smallint(6) DEFAULT NULL,
   `rushing_attempts` smallint(6) DEFAULT NULL,
@@ -159,7 +160,7 @@ CREATE TABLE `game_stats` (
   `passing_attempts` smallint(6) DEFAULT NULL,
   `passing_completions` smallint(6) DEFAULT NULL,
   `sacks` tinyint(4) DEFAULT NULL,
-  `sack_yards_lost` mediumint(9) DEFAULT NULL,
+  `sack_yards_lost` mediumint(9) unsigned zerofill DEFAULT NULL,
   `interceptions_thrown` smallint(6) DEFAULT NULL,
   `interception_return_yards` smallint(6) DEFAULT NULL,
   `interception_returns` smallint(6) DEFAULT NULL,
@@ -208,7 +209,6 @@ CREATE TABLE `game_stats` (
   KEY `game_id` (`game_id`),
   KEY `team_id` (`team_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 
 
@@ -583,6 +583,8 @@ DROP VIEW IF EXISTS `v_opponent_statistics`;
 CREATE TABLE `v_opponent_statistics` (
    `team_id` TINYINT(4) DEFAULT NULL,
    `season` SMALLINT(6) DEFAULT NULL,
+   `total_points` DECIMAL(27) DEFAULT NULL,
+   `avg_points` DECIMAL(9) DEFAULT NULL,
    `total_turnovers` DECIMAL(27) DEFAULT NULL,
    `avg_turnovers` DECIMAL(9) DEFAULT NULL,
    `total_rushing_yards` DECIMAL(27) DEFAULT NULL,
@@ -593,12 +595,14 @@ CREATE TABLE `v_opponent_statistics` (
    `avg_passing_completions` DECIMAL(9) DEFAULT NULL,
    `total_sacks` DECIMAL(25) DEFAULT NULL,
    `avg_sacks` DECIMAL(7) DEFAULT NULL,
-   `total_sack_yards_lost` DECIMAL(30) DEFAULT NULL,
-   `avg_sack_yards_lost` DECIMAL(12) DEFAULT NULL,
+   `total_sack_yards_lost` DECIMAL(31) DEFAULT NULL,
+   `avg_sack_yards_lost` DECIMAL(13) DEFAULT NULL,
    `total_interceptions_thrown` DECIMAL(27) DEFAULT NULL,
    `avg_interceptions_thrown` DECIMAL(9) DEFAULT NULL,
    `total_interception_return_yards` DECIMAL(27) DEFAULT NULL,
    `avg_interception_return_yards` DECIMAL(9) DEFAULT NULL,
+   `total_interception_returns` DECIMAL(27) DEFAULT NULL,
+   `avg_interception_returns` DECIMAL(9) DEFAULT NULL,
    `total_rushing_1st_downs` DECIMAL(27) DEFAULT NULL,
    `avg_rushing_1st_downs` DECIMAL(9) DEFAULT NULL,
    `total_passing_1st_downs` DECIMAL(27) DEFAULT NULL,
@@ -615,14 +619,26 @@ CREATE TABLE `v_opponent_statistics` (
    `avg_fourth_down_conversions` DECIMAL(9) DEFAULT NULL,
    `total_punts` DECIMAL(27) DEFAULT NULL,
    `avg_punts` DECIMAL(9) DEFAULT NULL,
+   `total_punts_blocked` DECIMAL(25) DEFAULT NULL,
+   `avg_punts_blocked` DECIMAL(7) DEFAULT NULL,
    `total_punt_average_distance` DOUBLE DEFAULT NULL,
    `avg_punt_average_distance` DOUBLE DEFAULT NULL,
+   `total_punt_net_average` DOUBLE DEFAULT NULL,
+   `avg_punt_net_average` DOUBLE DEFAULT NULL,
    `total_punt_returns` DECIMAL(27) DEFAULT NULL,
    `avg_punt_returns` DECIMAL(9) DEFAULT NULL,
+   `total_punt_return_yards` DECIMAL(27) DEFAULT NULL,
+   `avg_punt_return_yards` DECIMAL(9) DEFAULT NULL,
    `total_kickoffs` DECIMAL(27) DEFAULT NULL,
    `avg_kickoffs` DECIMAL(9) DEFAULT NULL,
+   `total_kickoffs_in_endzone` DECIMAL(27) DEFAULT NULL,
+   `avg_kickoffs_in_endzone` DECIMAL(9) DEFAULT NULL,
+   `total_kickoffs_touchback` DECIMAL(27) DEFAULT NULL,
+   `avg_kickoffs_touchback` DECIMAL(9) DEFAULT NULL,
    `total_kickoff_returns` DECIMAL(27) DEFAULT NULL,
    `avg_kickoff_returns` DECIMAL(9) DEFAULT NULL,
+   `total_kickoff_return_yards` DECIMAL(27) DEFAULT NULL,
+   `avg_kickoff_return_yards` DECIMAL(9) DEFAULT NULL,
    `total_penalties` DECIMAL(27) DEFAULT NULL,
    `avg_penalties` DECIMAL(9) DEFAULT NULL,
    `total_penalty_yards` DECIMAL(27) DEFAULT NULL,
@@ -643,10 +659,14 @@ CREATE TABLE `v_opponent_statistics` (
    `avg_xp_attempts` DECIMAL(9) DEFAULT NULL,
    `total_xp_conversions` DECIMAL(27) DEFAULT NULL,
    `avg_xp_conversions` DECIMAL(9) DEFAULT NULL,
+   `total_xp_blocked` DECIMAL(27) DEFAULT NULL,
+   `avg_xp_blocked` DECIMAL(9) DEFAULT NULL,
    `total_fg_attempts` DECIMAL(27) DEFAULT NULL,
    `avg_fg_attempts` DECIMAL(9) DEFAULT NULL,
    `total_fg_conversions` DECIMAL(27) DEFAULT NULL,
    `avg_fg_conversions` DECIMAL(9) DEFAULT NULL,
+   `total_fg_blocked` DECIMAL(27) DEFAULT NULL,
+   `avg_fg_blocked` DECIMAL(9) DEFAULT NULL,
    `total_goal_to_go_attempts` DECIMAL(27) DEFAULT NULL,
    `avg_goal_to_go_attempts` DECIMAL(9) DEFAULT NULL,
    `total_goal_to_go_successes` DECIMAL(27) DEFAULT NULL,
@@ -656,11 +676,7 @@ CREATE TABLE `v_opponent_statistics` (
    `total_red_zone_successes` DECIMAL(27) DEFAULT NULL,
    `avg_red_zone_successes` DECIMAL(9) DEFAULT NULL,
    `total_safeties` DECIMAL(25) DEFAULT NULL,
-   `avg_safeties` DECIMAL(7) DEFAULT NULL,
-   `total_total_drives` DECIMAL(27) DEFAULT NULL,
-   `avg_total_drives` DECIMAL(9) DEFAULT NULL,
-   `total_average_drive_start` DECIMAL(27) DEFAULT NULL,
-   `avg_average_drive_start` DECIMAL(9) DEFAULT NULL
+   `avg_safeties` DECIMAL(7) DEFAULT NULL
 ) ENGINE=MyISAM;
 
 
@@ -746,6 +762,8 @@ DROP VIEW IF EXISTS `v_team_statistics`;
 CREATE TABLE `v_team_statistics` (
    `team_id` TINYINT(4) DEFAULT NULL,
    `season` SMALLINT(6) DEFAULT NULL,
+   `total_points` DECIMAL(27) DEFAULT NULL,
+   `avg_points` DECIMAL(9) DEFAULT NULL,
    `total_turnovers` DECIMAL(27) DEFAULT NULL,
    `avg_turnovers` DECIMAL(9) DEFAULT NULL,
    `total_rushing_yards` DECIMAL(27) DEFAULT NULL,
@@ -756,12 +774,14 @@ CREATE TABLE `v_team_statistics` (
    `avg_passing_completions` DECIMAL(9) DEFAULT NULL,
    `total_sacks` DECIMAL(25) DEFAULT NULL,
    `avg_sacks` DECIMAL(7) DEFAULT NULL,
-   `total_sack_yards_lost` DECIMAL(30) DEFAULT NULL,
-   `avg_sack_yards_lost` DECIMAL(12) DEFAULT NULL,
+   `total_sack_yards_lost` DECIMAL(31) DEFAULT NULL,
+   `avg_sack_yards_lost` DECIMAL(13) DEFAULT NULL,
    `total_interceptions_thrown` DECIMAL(27) DEFAULT NULL,
    `avg_interceptions_thrown` DECIMAL(9) DEFAULT NULL,
    `total_interception_return_yards` DECIMAL(27) DEFAULT NULL,
    `avg_interception_return_yards` DECIMAL(9) DEFAULT NULL,
+   `total_interception_returns` DECIMAL(27) DEFAULT NULL,
+   `avg_interception_returns` DECIMAL(9) DEFAULT NULL,
    `total_rushing_1st_downs` DECIMAL(27) DEFAULT NULL,
    `avg_rushing_1st_downs` DECIMAL(9) DEFAULT NULL,
    `total_passing_1st_downs` DECIMAL(27) DEFAULT NULL,
@@ -778,14 +798,26 @@ CREATE TABLE `v_team_statistics` (
    `avg_fourth_down_conversions` DECIMAL(9) DEFAULT NULL,
    `total_punts` DECIMAL(27) DEFAULT NULL,
    `avg_punts` DECIMAL(9) DEFAULT NULL,
+   `total_punts_blocked` DECIMAL(25) DEFAULT NULL,
+   `avg_punts_blocked` DECIMAL(7) DEFAULT NULL,
    `total_punt_average_distance` DOUBLE DEFAULT NULL,
    `avg_punt_average_distance` DOUBLE DEFAULT NULL,
+   `total_punt_net_average` DOUBLE DEFAULT NULL,
+   `avg_punt_net_average` DOUBLE DEFAULT NULL,
    `total_punt_returns` DECIMAL(27) DEFAULT NULL,
    `avg_punt_returns` DECIMAL(9) DEFAULT NULL,
+   `total_punt_return_yards` DECIMAL(27) DEFAULT NULL,
+   `avg_punt_return_yards` DECIMAL(9) DEFAULT NULL,
    `total_kickoffs` DECIMAL(27) DEFAULT NULL,
    `avg_kickoffs` DECIMAL(9) DEFAULT NULL,
+   `total_kickoffs_in_endzone` DECIMAL(27) DEFAULT NULL,
+   `avg_kickoffs_in_endzone` DECIMAL(9) DEFAULT NULL,
+   `total_kickoffs_touchback` DECIMAL(27) DEFAULT NULL,
+   `avg_kickoffs_touchback` DECIMAL(9) DEFAULT NULL,
    `total_kickoff_returns` DECIMAL(27) DEFAULT NULL,
    `avg_kickoff_returns` DECIMAL(9) DEFAULT NULL,
+   `total_kickoff_return_yards` DECIMAL(27) DEFAULT NULL,
+   `avg_kickoff_return_yards` DECIMAL(9) DEFAULT NULL,
    `total_penalties` DECIMAL(27) DEFAULT NULL,
    `avg_penalties` DECIMAL(9) DEFAULT NULL,
    `total_penalty_yards` DECIMAL(27) DEFAULT NULL,
@@ -806,10 +838,14 @@ CREATE TABLE `v_team_statistics` (
    `avg_xp_attempts` DECIMAL(9) DEFAULT NULL,
    `total_xp_conversions` DECIMAL(27) DEFAULT NULL,
    `avg_xp_conversions` DECIMAL(9) DEFAULT NULL,
+   `total_xp_blocked` DECIMAL(27) DEFAULT NULL,
+   `avg_xp_blocked` DECIMAL(9) DEFAULT NULL,
    `total_fg_attempts` DECIMAL(27) DEFAULT NULL,
    `avg_fg_attempts` DECIMAL(9) DEFAULT NULL,
    `total_fg_conversions` DECIMAL(27) DEFAULT NULL,
    `avg_fg_conversions` DECIMAL(9) DEFAULT NULL,
+   `total_fg_blocked` DECIMAL(27) DEFAULT NULL,
+   `avg_fg_blocked` DECIMAL(9) DEFAULT NULL,
    `total_goal_to_go_attempts` DECIMAL(27) DEFAULT NULL,
    `avg_goal_to_go_attempts` DECIMAL(9) DEFAULT NULL,
    `total_goal_to_go_successes` DECIMAL(27) DEFAULT NULL,
@@ -819,11 +855,7 @@ CREATE TABLE `v_team_statistics` (
    `total_red_zone_successes` DECIMAL(27) DEFAULT NULL,
    `avg_red_zone_successes` DECIMAL(9) DEFAULT NULL,
    `total_safeties` DECIMAL(25) DEFAULT NULL,
-   `avg_safeties` DECIMAL(7) DEFAULT NULL,
-   `total_total_drives` DECIMAL(27) DEFAULT NULL,
-   `avg_total_drives` DECIMAL(9) DEFAULT NULL,
-   `total_average_drive_start` DECIMAL(27) DEFAULT NULL,
-   `avg_average_drive_start` DECIMAL(9) DEFAULT NULL
+   `avg_safeties` DECIMAL(7) DEFAULT NULL
 ) ENGINE=MyISAM;
 
 
@@ -905,7 +937,7 @@ DROP TABLE `v_opponent_statistics`;
 CREATE ALGORITHM=UNDEFINED VIEW `v_opponent_statistics`
 AS select
    `oid`.`team_id` AS `team_id`,
-   `oid`.`season` AS `season`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_attempts`) AS `avg_xp_conversions`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_attempts`) AS `avg_fg_conversions`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`,sum(`gs`.`total_drives`) AS `total_total_drives`,avg(`gs`.`total_drives`) AS `avg_total_drives`,sum(`gs`.`average_drive_start`) AS `total_average_drive_start`,avg(`gs`.`average_drive_start`) AS `avg_average_drive_start`
+   `oid`.`season` AS `season`,sum(`gs`.`points`) AS `total_points`,avg(`gs`.`points`) AS `avg_points`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`interception_returns`) AS `total_interception_returns`,avg(`gs`.`interception_returns`) AS `avg_interception_returns`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punts_blocked`) AS `total_punts_blocked`,avg(`gs`.`punts_blocked`) AS `avg_punts_blocked`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_net_average`) AS `total_punt_net_average`,avg(`gs`.`punt_net_average`) AS `avg_punt_net_average`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`punt_return_yards`) AS `total_punt_return_yards`,avg(`gs`.`punt_return_yards`) AS `avg_punt_return_yards`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoffs_in_endzone`) AS `total_kickoffs_in_endzone`,avg(`gs`.`kickoffs_in_endzone`) AS `avg_kickoffs_in_endzone`,sum(`gs`.`kickoffs_touchback`) AS `total_kickoffs_touchback`,avg(`gs`.`kickoffs_touchback`) AS `avg_kickoffs_touchback`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`kickoff_return_yards`) AS `total_kickoff_return_yards`,avg(`gs`.`kickoff_return_yards`) AS `avg_kickoff_return_yards`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_conversions`) AS `avg_xp_conversions`,sum(`gs`.`xp_blocked`) AS `total_xp_blocked`,avg(`gs`.`xp_blocked`) AS `avg_xp_blocked`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_conversions`) AS `avg_fg_conversions`,sum(`gs`.`fg_blocked`) AS `total_fg_blocked`,avg(`gs`.`fg_blocked`) AS `avg_fg_blocked`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`
 from (`game_stats` `gs` join `v_team_schedule` `oid` on(((`gs`.`game_id` = `oid`.`game_id`) and (`gs`.`team_id` = `oid`.`opponent_id`)))) group by `oid`.`season`,`oid`.`team_id`;
 
 
@@ -965,7 +997,7 @@ DROP TABLE `v_team_statistics`;
 CREATE ALGORITHM=UNDEFINED VIEW `v_team_statistics`
 AS select
    `gs`.`team_id` AS `team_id`,
-   `schedule`.`season` AS `season`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_attempts`) AS `avg_xp_conversions`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_attempts`) AS `avg_fg_conversions`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`,sum(`gs`.`total_drives`) AS `total_total_drives`,avg(`gs`.`total_drives`) AS `avg_total_drives`,sum(`gs`.`average_drive_start`) AS `total_average_drive_start`,avg(`gs`.`average_drive_start`) AS `avg_average_drive_start`
+   `schedule`.`season` AS `season`,sum(`gs`.`points`) AS `total_points`,avg(`gs`.`points`) AS `avg_points`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`interception_returns`) AS `total_interception_returns`,avg(`gs`.`interception_returns`) AS `avg_interception_returns`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punts_blocked`) AS `total_punts_blocked`,avg(`gs`.`punts_blocked`) AS `avg_punts_blocked`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_net_average`) AS `total_punt_net_average`,avg(`gs`.`punt_net_average`) AS `avg_punt_net_average`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`punt_return_yards`) AS `total_punt_return_yards`,avg(`gs`.`punt_return_yards`) AS `avg_punt_return_yards`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoffs_in_endzone`) AS `total_kickoffs_in_endzone`,avg(`gs`.`kickoffs_in_endzone`) AS `avg_kickoffs_in_endzone`,sum(`gs`.`kickoffs_touchback`) AS `total_kickoffs_touchback`,avg(`gs`.`kickoffs_touchback`) AS `avg_kickoffs_touchback`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`kickoff_return_yards`) AS `total_kickoff_return_yards`,avg(`gs`.`kickoff_return_yards`) AS `avg_kickoff_return_yards`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_conversions`) AS `avg_xp_conversions`,sum(`gs`.`xp_blocked`) AS `total_xp_blocked`,avg(`gs`.`xp_blocked`) AS `avg_xp_blocked`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_conversions`) AS `avg_fg_conversions`,sum(`gs`.`fg_blocked`) AS `total_fg_blocked`,avg(`gs`.`fg_blocked`) AS `avg_fg_blocked`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`
 from (`game_stats` `gs` join `schedule` on((`schedule`.`game_id` = `gs`.`game_id`))) group by `gs`.`team_id`,`schedule`.`season`;
 
 
