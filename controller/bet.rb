@@ -23,7 +23,6 @@ class BetController < Controller
     def place(bet_set_id,week_type,week_number,game_id,team_id)
         login_required
 
-
         bet = Bet.new(
             :created_at => Time.now,
             :updated_at => Time.now,
@@ -37,6 +36,34 @@ class BetController < Controller
         bet.validate(user,current_season,current_week_type,current_week_number)
         bet.save
 
+    end
+
+    def choose(season=current_season,week_type=current_week_type,week_number=current_week_number)
+        login_required
+
+        @bet_sets = BetSet.where(:user_id => user.id)
+        @bets = Bet.where(
+            :user_id => user.id,
+            :season => season,
+            :week_type => week_type,
+            :week_number => week_number
+        )
+        schedule = Schedule.join(:spread,:game_id => :game_id).where(
+            :season => season,
+            :week_type => week_type,
+            :week_number => week_number
+        )
+        i = 0
+        @games_left_col = []
+        @games_right_col = []
+        schedule.each do |game|
+            i+=1
+            if i.odd?
+                @games_left_col.push(game)
+            else
+                @games_right_col.push(game)
+            end
+        end
     end
 
     private

@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.5.18)
 # Database: eliminator
-# Generation Time: 2012-02-06 02:10:26 +0000
+# Generation Time: 2012-02-07 00:29:46 +0000
 # ************************************************************
 
 
@@ -74,39 +74,45 @@ DROP TABLE IF EXISTS `full_records`;
 CREATE TABLE `full_records` (
   `team_id` tinyint(4) NOT NULL DEFAULT '0',
   `season` smallint(6) NOT NULL DEFAULT '0',
-  `won` decimal(41,0) DEFAULT NULL,
-  `lost` decimal(41,0) DEFAULT NULL,
-  `tied` decimal(41,0) DEFAULT NULL,
-  `conference_won` decimal(41,0) DEFAULT NULL,
-  `conference_lost` decimal(41,0) DEFAULT NULL,
-  `conference_tied` decimal(41,0) DEFAULT NULL,
-  `nonconference_won` decimal(41,0) DEFAULT NULL,
-  `nonconference_lost` decimal(41,0) DEFAULT NULL,
-  `nonconference_tied` decimal(41,0) DEFAULT NULL,
-  `nfc_north_won` decimal(41,0) DEFAULT NULL,
-  `nfc_north_lost` decimal(41,0) DEFAULT NULL,
-  `nfc_north_tied` decimal(41,0) DEFAULT NULL,
-  `nfc_south_won` decimal(41,0) DEFAULT NULL,
-  `nfc_south_lost` decimal(41,0) DEFAULT NULL,
-  `nfc_south_tied` decimal(41,0) DEFAULT NULL,
-  `nfc_east_won` decimal(41,0) DEFAULT NULL,
-  `nfc_east_lost` decimal(41,0) DEFAULT NULL,
-  `nfc_east_tied` decimal(41,0) DEFAULT NULL,
-  `nfc_west_won` decimal(41,0) DEFAULT NULL,
-  `nfc_west_lost` decimal(41,0) DEFAULT NULL,
-  `nfc_west_tied` decimal(41,0) DEFAULT NULL,
-  `afc_north_won` decimal(41,0) DEFAULT NULL,
-  `afc_north_lost` decimal(41,0) DEFAULT NULL,
-  `afc_north_tied` decimal(41,0) DEFAULT NULL,
-  `afc_south_won` decimal(41,0) DEFAULT NULL,
-  `afc_south_lost` decimal(41,0) DEFAULT NULL,
-  `afc_south_tied` decimal(41,0) DEFAULT NULL,
-  `afc_east_won` decimal(41,0) DEFAULT NULL,
-  `afc_east_lost` decimal(41,0) DEFAULT NULL,
-  `afc_east_tied` decimal(41,0) DEFAULT NULL,
-  `afc_west_won` decimal(41,0) DEFAULT NULL,
-  `afc_west_lost` decimal(41,0) DEFAULT NULL,
-  `afc_west_tied` decimal(41,0) DEFAULT NULL,
+  `won` smallint(6) DEFAULT NULL,
+  `lost` smallint(6) DEFAULT NULL,
+  `tied` smallint(6) DEFAULT NULL,
+  `home_won` smallint(6) DEFAULT NULL,
+  `home_lost` smallint(6) DEFAULT NULL,
+  `home_tied` smallint(6) DEFAULT NULL,
+  `away_won` smallint(6) DEFAULT NULL,
+  `away_lost` smallint(6) DEFAULT NULL,
+  `away_tied` smallint(6) DEFAULT NULL,
+  `conference_won` smallint(6) DEFAULT NULL,
+  `conference_lost` smallint(6) DEFAULT NULL,
+  `conference_tied` smallint(6) DEFAULT NULL,
+  `nonconference_won` smallint(6) DEFAULT NULL,
+  `nonconference_lost` smallint(6) DEFAULT NULL,
+  `nonconference_tied` smallint(6) DEFAULT NULL,
+  `nfc_north_won` smallint(6) DEFAULT NULL,
+  `nfc_north_lost` smallint(6) DEFAULT NULL,
+  `nfc_north_tied` smallint(6) DEFAULT NULL,
+  `nfc_south_won` smallint(6) DEFAULT NULL,
+  `nfc_south_lost` smallint(6) DEFAULT NULL,
+  `nfc_south_tied` smallint(6) DEFAULT NULL,
+  `nfc_east_won` smallint(6) DEFAULT NULL,
+  `nfc_east_lost` smallint(6) DEFAULT NULL,
+  `nfc_east_tied` smallint(6) DEFAULT NULL,
+  `nfc_west_won` smallint(6) DEFAULT NULL,
+  `nfc_west_lost` smallint(6) DEFAULT NULL,
+  `nfc_west_tied` smallint(6) DEFAULT NULL,
+  `afc_north_won` smallint(6) DEFAULT NULL,
+  `afc_north_lost` smallint(6) DEFAULT NULL,
+  `afc_north_tied` smallint(6) DEFAULT NULL,
+  `afc_south_won` smallint(6) DEFAULT NULL,
+  `afc_south_lost` smallint(6) DEFAULT NULL,
+  `afc_south_tied` smallint(6) DEFAULT NULL,
+  `afc_east_won` smallint(6) DEFAULT NULL,
+  `afc_east_lost` smallint(6) DEFAULT NULL,
+  `afc_east_tied` smallint(6) DEFAULT NULL,
+  `afc_west_won` smallint(6) DEFAULT NULL,
+  `afc_west_lost` smallint(6) DEFAULT NULL,
+  `afc_west_tied` smallint(6) DEFAULT NULL,
   PRIMARY KEY (`team_id`,`season`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -231,8 +237,8 @@ CREATE TABLE `group_features` (
 DROP TABLE IF EXISTS `group_members`;
 
 CREATE TABLE `group_members` (
-  `group_id` int(11) unsigned DEFAULT NULL,
-  `user_id` int(11) unsigned DEFAULT NULL,
+  `group_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
   `created_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -484,97 +490,6 @@ CREATE TABLE `v_bets_with_users_teams_results` (
 
 
 
-# Dump of table v_full_records
-# ------------------------------------------------------------
-
-DROP VIEW IF EXISTS `v_full_records`;
-
-CREATE TABLE `v_full_records` (
-   `team_id` TINYINT(4) DEFAULT NULL,
-   `season` SMALLINT(6) DEFAULT NULL,
-   `won` DECIMAL(41) DEFAULT NULL,
-   `lost` DECIMAL(41) DEFAULT NULL,
-   `tied` DECIMAL(41) DEFAULT NULL,
-   `conference_won` DECIMAL(41) DEFAULT NULL,
-   `conference_lost` DECIMAL(41) DEFAULT NULL,
-   `conference_tied` DECIMAL(41) DEFAULT NULL,
-   `nonconference_won` DECIMAL(41) DEFAULT NULL,
-   `nonconference_lost` DECIMAL(41) DEFAULT NULL,
-   `nonconference_tied` DECIMAL(41) DEFAULT NULL,
-   `nfc_north_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_north_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_north_tied` DECIMAL(41) DEFAULT NULL,
-   `nfc_south_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_south_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_south_tied` DECIMAL(41) DEFAULT NULL,
-   `nfc_east_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_east_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_east_tied` DECIMAL(41) DEFAULT NULL,
-   `nfc_west_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_west_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_west_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_north_won` DECIMAL(41) DEFAULT NULL,
-   `afc_north_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_north_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_south_won` DECIMAL(41) DEFAULT NULL,
-   `afc_south_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_south_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_east_won` DECIMAL(41) DEFAULT NULL,
-   `afc_east_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_east_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_west_won` DECIMAL(41) DEFAULT NULL,
-   `afc_west_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_west_tied` DECIMAL(41) DEFAULT NULL
-) ENGINE=MyISAM;
-
-
-
-# Dump of table v_full_records_unsummed
-# ------------------------------------------------------------
-
-DROP VIEW IF EXISTS `v_full_records_unsummed`;
-
-CREATE TABLE `v_full_records_unsummed` (
-   `game_id` VARCHAR(255) DEFAULT NULL,
-   `season` SMALLINT(6) DEFAULT NULL,
-   `team_id` TINYINT(4) DEFAULT NULL,
-   `won` BIGINT(20) DEFAULT NULL,
-   `lost` BIGINT(20) DEFAULT NULL,
-   `tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `conference_won` BIGINT(20) DEFAULT NULL,
-   `conference_lost` BIGINT(20) DEFAULT NULL,
-   `conference_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `nonconference_won` BIGINT(20) DEFAULT NULL,
-   `nonconference_lost` BIGINT(20) DEFAULT NULL,
-   `nonconference_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `afc_north_won` BIGINT(20) DEFAULT NULL,
-   `afc_north_lost` BIGINT(20) DEFAULT NULL,
-   `afc_north_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `afc_south_won` BIGINT(20) DEFAULT NULL,
-   `afc_south_lost` BIGINT(20) DEFAULT NULL,
-   `afc_south_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `afc_east_won` BIGINT(20) DEFAULT NULL,
-   `afc_east_lost` BIGINT(20) DEFAULT NULL,
-   `afc_east_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `afc_west_won` BIGINT(20) DEFAULT NULL,
-   `afc_west_lost` BIGINT(20) DEFAULT NULL,
-   `afc_west_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `nfc_north_won` BIGINT(20) DEFAULT NULL,
-   `nfc_north_lost` BIGINT(20) DEFAULT NULL,
-   `nfc_north_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `nfc_south_won` BIGINT(20) DEFAULT NULL,
-   `nfc_south_lost` BIGINT(20) DEFAULT NULL,
-   `nfc_south_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `nfc_east_won` BIGINT(20) DEFAULT NULL,
-   `nfc_east_lost` BIGINT(20) DEFAULT NULL,
-   `nfc_east_tied` BIGINT(20) NOT NULL DEFAULT '0',
-   `nfc_west_won` BIGINT(20) DEFAULT NULL,
-   `nfc_west_lost` BIGINT(20) DEFAULT NULL,
-   `nfc_west_tied` BIGINT(20) NOT NULL DEFAULT '0'
-) ENGINE=MyISAM;
-
-
-
 # Dump of table v_opponent_statistics
 # ------------------------------------------------------------
 
@@ -702,37 +617,6 @@ CREATE TABLE `v_schedule_and_results` (
    `possession` TINYINT(1) DEFAULT NULL,
    `in_red_zone` TINYINT(1) DEFAULT NULL,
    `winning_team_id` TINYINT(4) DEFAULT NULL
-) ENGINE=MyISAM;
-
-
-
-# Dump of table v_team_records
-# ------------------------------------------------------------
-
-DROP VIEW IF EXISTS `v_team_records`;
-
-CREATE TABLE `v_team_records` (
-   `won` DECIMAL(41) DEFAULT NULL,
-   `lost` DECIMAL(41) DEFAULT NULL,
-   `tied` DECIMAL(41) DEFAULT NULL,
-   `team_id` TINYINT(4) DEFAULT NULL,
-   `season` SMALLINT(6) DEFAULT NULL
-) ENGINE=MyISAM;
-
-
-
-# Dump of table v_team_records_unsummed
-# ------------------------------------------------------------
-
-DROP VIEW IF EXISTS `v_team_records_unsummed`;
-
-CREATE TABLE `v_team_records_unsummed` (
-   `game_id` VARCHAR(255) DEFAULT NULL,
-   `season` SMALLINT(6) DEFAULT NULL,
-   `team_id` TINYINT(4) DEFAULT NULL,
-   `won` BIGINT(20) DEFAULT NULL,
-   `lost` BIGINT(20) DEFAULT NULL,
-   `tied` BIGINT(20) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM;
 
 
@@ -874,60 +758,42 @@ CREATE TABLE `v_teams_with_records` (
    `conference` VARCHAR(255) NOT NULL DEFAULT '',
    `division` VARCHAR(255) NOT NULL DEFAULT '',
    `season` SMALLINT(6) NOT NULL DEFAULT '0',
-   `won` DECIMAL(41) DEFAULT NULL,
-   `lost` DECIMAL(41) DEFAULT NULL,
-   `tied` DECIMAL(41) DEFAULT NULL,
-   `conference_won` DECIMAL(41) DEFAULT NULL,
-   `conference_lost` DECIMAL(41) DEFAULT NULL,
-   `conference_tied` DECIMAL(41) DEFAULT NULL,
-   `nonconference_won` DECIMAL(41) DEFAULT NULL,
-   `nonconference_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_north_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_north_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_north_tied` DECIMAL(41) DEFAULT NULL,
-   `nfc_south_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_south_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_south_tied` DECIMAL(41) DEFAULT NULL,
-   `nfc_east_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_east_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_east_tied` DECIMAL(41) DEFAULT NULL,
-   `nfc_west_won` DECIMAL(41) DEFAULT NULL,
-   `nfc_west_lost` DECIMAL(41) DEFAULT NULL,
-   `nfc_west_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_north_won` DECIMAL(41) DEFAULT NULL,
-   `afc_north_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_north_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_south_won` DECIMAL(41) DEFAULT NULL,
-   `afc_south_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_south_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_east_won` DECIMAL(41) DEFAULT NULL,
-   `afc_east_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_east_tied` DECIMAL(41) DEFAULT NULL,
-   `afc_west_won` DECIMAL(41) DEFAULT NULL,
-   `afc_west_lost` DECIMAL(41) DEFAULT NULL,
-   `afc_west_tied` DECIMAL(41) DEFAULT NULL
+   `won` SMALLINT(6) DEFAULT NULL,
+   `lost` SMALLINT(6) DEFAULT NULL,
+   `tied` SMALLINT(6) DEFAULT NULL,
+   `conference_won` SMALLINT(6) DEFAULT NULL,
+   `conference_lost` SMALLINT(6) DEFAULT NULL,
+   `conference_tied` SMALLINT(6) DEFAULT NULL,
+   `nonconference_won` SMALLINT(6) DEFAULT NULL,
+   `nonconference_lost` SMALLINT(6) DEFAULT NULL,
+   `nfc_north_won` SMALLINT(6) DEFAULT NULL,
+   `nfc_north_lost` SMALLINT(6) DEFAULT NULL,
+   `nfc_north_tied` SMALLINT(6) DEFAULT NULL,
+   `nfc_south_won` SMALLINT(6) DEFAULT NULL,
+   `nfc_south_lost` SMALLINT(6) DEFAULT NULL,
+   `nfc_south_tied` SMALLINT(6) DEFAULT NULL,
+   `nfc_east_won` SMALLINT(6) DEFAULT NULL,
+   `nfc_east_lost` SMALLINT(6) DEFAULT NULL,
+   `nfc_east_tied` SMALLINT(6) DEFAULT NULL,
+   `nfc_west_won` SMALLINT(6) DEFAULT NULL,
+   `nfc_west_lost` SMALLINT(6) DEFAULT NULL,
+   `nfc_west_tied` SMALLINT(6) DEFAULT NULL,
+   `afc_north_won` SMALLINT(6) DEFAULT NULL,
+   `afc_north_lost` SMALLINT(6) DEFAULT NULL,
+   `afc_north_tied` SMALLINT(6) DEFAULT NULL,
+   `afc_south_won` SMALLINT(6) DEFAULT NULL,
+   `afc_south_lost` SMALLINT(6) DEFAULT NULL,
+   `afc_south_tied` SMALLINT(6) DEFAULT NULL,
+   `afc_east_won` SMALLINT(6) DEFAULT NULL,
+   `afc_east_lost` SMALLINT(6) DEFAULT NULL,
+   `afc_east_tied` SMALLINT(6) DEFAULT NULL,
+   `afc_west_won` SMALLINT(6) DEFAULT NULL,
+   `afc_west_lost` SMALLINT(6) DEFAULT NULL,
+   `afc_west_tied` SMALLINT(6) DEFAULT NULL
 ) ENGINE=MyISAM;
 
 
 
-
-
-# Replace placeholder table for v_bet_records with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_bet_records`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_bet_records`
-AS select
-   `v_bet_records_unsummed`.`user_id` AS `user_id`,
-   `v_bet_records_unsummed`.`season` AS `season`,sum(`v_bet_records_unsummed`.`s_h_reg_won`) AS `s_h_reg_won`,sum(`v_bet_records_unsummed`.`s_h_reg_lost`) AS `s_h_reg_lost`,sum(`v_bet_records_unsummed`.`s_h_rev_won`) AS `s_h_rev_won`,sum(`v_bet_records_unsummed`.`s_h_rev_lost`) AS `s_h_rev_lost`,sum(`v_bet_records_unsummed`.`p_h_reg_won`) AS `p_h_reg_won`,sum(`v_bet_records_unsummed`.`p_h_reg_lost`) AS `p_h_reg_lost`,sum(`v_bet_records_unsummed`.`p_h_rev_won`) AS `p_h_rev_won`,sum(`v_bet_records_unsummed`.`p_h_rev_lost`) AS `p_h_rev_lost`,sum(`v_bet_records_unsummed`.`s_a_reg_won`) AS `s_a_reg_won`,sum(`v_bet_records_unsummed`.`s_a_reg_lost`) AS `s_a_reg_lost`,sum(`v_bet_records_unsummed`.`s_a_reg_push`) AS `s_a_reg_push`,sum(`v_bet_records_unsummed`.`s_a_rev_won`) AS `s_a_rev_won`,sum(`v_bet_records_unsummed`.`s_a_rev_lost`) AS `s_a_rev_lost`,sum(`v_bet_records_unsummed`.`s_a_reg_push`) AS `s_a_rev_push`,sum(`v_bet_records_unsummed`.`p_a_reg_won`) AS `p_a_reg_won`,sum(`v_bet_records_unsummed`.`p_a_reg_lost`) AS `p_a_reg_lost`,sum(`v_bet_records_unsummed`.`p_a_reg_push`) AS `p_a_reg_push`,sum(`v_bet_records_unsummed`.`p_a_rev_won`) AS `p_a_rev_won`,sum(`v_bet_records_unsummed`.`p_a_rev_lost`) AS `p_a_rev_lost`,sum(`v_bet_records_unsummed`.`p_a_reg_push`) AS `p_a_rev_push`
-from `v_bet_records_unsummed` group by `v_bet_records_unsummed`.`user_id`,`v_bet_records_unsummed`.`season`;
-
-
-# Replace placeholder table for v_team_records with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_team_records`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_team_records` AS (select sum(`v_team_records_unsummed`.`won`) AS `won`,sum(`v_team_records_unsummed`.`lost`) AS `lost`,sum(`v_team_records_unsummed`.`tied`) AS `tied`,`v_team_records_unsummed`.`team_id` AS `team_id`,`v_team_records_unsummed`.`season` AS `season` from `v_team_records_unsummed` group by `v_team_records_unsummed`.`team_id`,`v_team_records_unsummed`.`season`);
 
 
 # Replace placeholder table for v_opponent_statistics with correct view syntax
@@ -939,30 +805,6 @@ AS select
    `oid`.`team_id` AS `team_id`,
    `oid`.`season` AS `season`,sum(`gs`.`points`) AS `total_points`,avg(`gs`.`points`) AS `avg_points`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`interception_returns`) AS `total_interception_returns`,avg(`gs`.`interception_returns`) AS `avg_interception_returns`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punts_blocked`) AS `total_punts_blocked`,avg(`gs`.`punts_blocked`) AS `avg_punts_blocked`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_net_average`) AS `total_punt_net_average`,avg(`gs`.`punt_net_average`) AS `avg_punt_net_average`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`punt_return_yards`) AS `total_punt_return_yards`,avg(`gs`.`punt_return_yards`) AS `avg_punt_return_yards`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoffs_in_endzone`) AS `total_kickoffs_in_endzone`,avg(`gs`.`kickoffs_in_endzone`) AS `avg_kickoffs_in_endzone`,sum(`gs`.`kickoffs_touchback`) AS `total_kickoffs_touchback`,avg(`gs`.`kickoffs_touchback`) AS `avg_kickoffs_touchback`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`kickoff_return_yards`) AS `total_kickoff_return_yards`,avg(`gs`.`kickoff_return_yards`) AS `avg_kickoff_return_yards`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_conversions`) AS `avg_xp_conversions`,sum(`gs`.`xp_blocked`) AS `total_xp_blocked`,avg(`gs`.`xp_blocked`) AS `avg_xp_blocked`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_conversions`) AS `avg_fg_conversions`,sum(`gs`.`fg_blocked`) AS `total_fg_blocked`,avg(`gs`.`fg_blocked`) AS `avg_fg_blocked`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`
 from (`game_stats` `gs` join `v_team_schedule` `oid` on(((`gs`.`game_id` = `oid`.`game_id`) and (`gs`.`team_id` = `oid`.`opponent_id`)))) group by `oid`.`season`,`oid`.`team_id`;
-
-
-# Replace placeholder table for v_schedule_and_results with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_schedule_and_results`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_schedule_and_results`
-AS select
-   `s`.`game_id` AS `game_id`,
-   `s`.`season` AS `season`,
-   `s`.`week_number` AS `week_number`,
-   `s`.`week_type` AS `week_type`,
-   `s`.`home_team_id` AS `home_team_id`,
-   `s`.`away_team_id` AS `away_team_id`,
-   `s`.`game_time` AS `game_time`,
-   `gr`.`home_score` AS `home_score`,
-   `gr`.`away_score` AS `away_score`,
-   `gr`.`game_clock` AS `game_clock`,
-   `gr`.`quarter` AS `quarter`,
-   `gr`.`status` AS `status`,
-   `gr`.`possession` AS `possession`,
-   `gr`.`in_red_zone` AS `in_red_zone`,
-   `gr`.`winning_team_id` AS `winning_team_id`
-from (`schedule` `s` join `game_results` `gr` on((`s`.`game_id` = `gr`.`game_id`)));
 
 
 # Replace placeholder table for v_team_schedule with correct view syntax
@@ -977,99 +819,6 @@ AS select
    `schedule`.`away_team_id` AS `opponent_id`,
    `schedule`.`home_team_id` AS `team_id`,1 AS `home`,0 AS `away`
 from `schedule` union select `schedule`.`game_id` AS `game_id`,`schedule`.`season` AS `season`,`schedule`.`week_number` AS `week_number`,`schedule`.`home_team_id` AS `opponent_id`,`schedule`.`away_team_id` AS `team_id`,0 AS `home`,1 AS `away` from `schedule` order by `game_id`;
-
-
-# Replace placeholder table for v_full_records with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_full_records`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_full_records`
-AS select
-   `v_full_records_unsummed`.`team_id` AS `team_id`,
-   `v_full_records_unsummed`.`season` AS `season`,sum(`v_full_records_unsummed`.`won`) AS `won`,sum(`v_full_records_unsummed`.`lost`) AS `lost`,sum(`v_full_records_unsummed`.`tied`) AS `tied`,sum(`v_full_records_unsummed`.`conference_won`) AS `conference_won`,sum(`v_full_records_unsummed`.`conference_lost`) AS `conference_lost`,sum(`v_full_records_unsummed`.`conference_tied`) AS `conference_tied`,sum(`v_full_records_unsummed`.`nonconference_won`) AS `nonconference_won`,sum(`v_full_records_unsummed`.`nonconference_lost`) AS `nonconference_lost`,sum(`v_full_records_unsummed`.`nonconference_tied`) AS `nonconference_tied`,sum(`v_full_records_unsummed`.`nfc_north_won`) AS `nfc_north_won`,sum(`v_full_records_unsummed`.`nfc_north_lost`) AS `nfc_north_lost`,sum(`v_full_records_unsummed`.`nfc_north_tied`) AS `nfc_north_tied`,sum(`v_full_records_unsummed`.`nfc_south_won`) AS `nfc_south_won`,sum(`v_full_records_unsummed`.`nfc_south_lost`) AS `nfc_south_lost`,sum(`v_full_records_unsummed`.`nfc_south_tied`) AS `nfc_south_tied`,sum(`v_full_records_unsummed`.`nfc_east_won`) AS `nfc_east_won`,sum(`v_full_records_unsummed`.`nfc_east_lost`) AS `nfc_east_lost`,sum(`v_full_records_unsummed`.`nfc_east_tied`) AS `nfc_east_tied`,sum(`v_full_records_unsummed`.`nfc_west_won`) AS `nfc_west_won`,sum(`v_full_records_unsummed`.`nfc_west_lost`) AS `nfc_west_lost`,sum(`v_full_records_unsummed`.`nfc_west_tied`) AS `nfc_west_tied`,sum(`v_full_records_unsummed`.`afc_north_won`) AS `afc_north_won`,sum(`v_full_records_unsummed`.`afc_north_lost`) AS `afc_north_lost`,sum(`v_full_records_unsummed`.`afc_north_tied`) AS `afc_north_tied`,sum(`v_full_records_unsummed`.`afc_south_won`) AS `afc_south_won`,sum(`v_full_records_unsummed`.`afc_south_lost`) AS `afc_south_lost`,sum(`v_full_records_unsummed`.`afc_south_tied`) AS `afc_south_tied`,sum(`v_full_records_unsummed`.`afc_east_won`) AS `afc_east_won`,sum(`v_full_records_unsummed`.`afc_east_lost`) AS `afc_east_lost`,sum(`v_full_records_unsummed`.`afc_east_tied`) AS `afc_east_tied`,sum(`v_full_records_unsummed`.`afc_west_won`) AS `afc_west_won`,sum(`v_full_records_unsummed`.`afc_west_lost`) AS `afc_west_lost`,sum(`v_full_records_unsummed`.`afc_west_tied`) AS `afc_west_tied`
-from `v_full_records_unsummed` group by `v_full_records_unsummed`.`season`,`v_full_records_unsummed`.`team_id`;
-
-
-# Replace placeholder table for v_team_statistics with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_team_statistics`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_team_statistics`
-AS select
-   `gs`.`team_id` AS `team_id`,
-   `schedule`.`season` AS `season`,sum(`gs`.`points`) AS `total_points`,avg(`gs`.`points`) AS `avg_points`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`interception_returns`) AS `total_interception_returns`,avg(`gs`.`interception_returns`) AS `avg_interception_returns`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punts_blocked`) AS `total_punts_blocked`,avg(`gs`.`punts_blocked`) AS `avg_punts_blocked`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_net_average`) AS `total_punt_net_average`,avg(`gs`.`punt_net_average`) AS `avg_punt_net_average`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`punt_return_yards`) AS `total_punt_return_yards`,avg(`gs`.`punt_return_yards`) AS `avg_punt_return_yards`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoffs_in_endzone`) AS `total_kickoffs_in_endzone`,avg(`gs`.`kickoffs_in_endzone`) AS `avg_kickoffs_in_endzone`,sum(`gs`.`kickoffs_touchback`) AS `total_kickoffs_touchback`,avg(`gs`.`kickoffs_touchback`) AS `avg_kickoffs_touchback`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`kickoff_return_yards`) AS `total_kickoff_return_yards`,avg(`gs`.`kickoff_return_yards`) AS `avg_kickoff_return_yards`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_conversions`) AS `avg_xp_conversions`,sum(`gs`.`xp_blocked`) AS `total_xp_blocked`,avg(`gs`.`xp_blocked`) AS `avg_xp_blocked`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_conversions`) AS `avg_fg_conversions`,sum(`gs`.`fg_blocked`) AS `total_fg_blocked`,avg(`gs`.`fg_blocked`) AS `avg_fg_blocked`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`
-from (`game_stats` `gs` join `schedule` on((`schedule`.`game_id` = `gs`.`game_id`))) group by `gs`.`team_id`,`schedule`.`season`;
-
-
-# Replace placeholder table for v_bets_with_users_teams_results with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_bets_with_users_teams_results`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_bets_with_users_teams_results`
-AS select
-   `bets`.`id` AS `id`,
-   `bets`.`created_at` AS `created_at`,
-   `bets`.`updated_at` AS `updated_at`,
-   `bets`.`user_id` AS `user_id`,
-   `bets`.`season` AS `season`,
-   `bets`.`week_number` AS `week_number`,
-   `bets`.`week_type` AS `week_type`,
-   `bets`.`game_id` AS `game_id`,
-   `bets`.`team_id` AS `team_id`,
-   `bets`.`spread_id` AS `spread_id`,
-   `bets`.`bet_set_id` AS `bet_set_id`,
-   `bets`.`survival_pickem` AS `survival_pickem`,
-   `bets`.`headsup_ats` AS `headsup_ats`,
-   `bets`.`regular_reverse` AS `regular_reverse`,
-   `users`.`username` AS `username`,
-   `teams`.`name` AS `team_name`,
-   `teams`.`short_name` AS `short_name`,
-   `game_results`.`status` AS `status`,
-   `game_results`.`winning_team_id` AS `winning_team_id`
-from (((`bets` join `users` on((`users`.`id` = `bets`.`user_id`))) join `teams` on((`bets`.`team_id` = `teams`.`id`))) join `game_results` on((`bets`.`game_id` = `game_results`.`game_id`)));
-
-
-# Replace placeholder table for v_team_records_unsummed with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_team_records_unsummed`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_team_records_unsummed`
-AS select
-   `v_schedule_and_results`.`game_id` AS `game_id`,
-   `v_schedule_and_results`.`season` AS `season`,
-   `v_schedule_and_results`.`home_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied`
-from `v_schedule_and_results`
-where (`v_schedule_and_results`.`status` = 'FINAL') union all select `v_schedule_and_results`.`game_id` AS `game_id`,`v_schedule_and_results`.`season` AS `season`,`v_schedule_and_results`.`away_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied` from `v_schedule_and_results`
-where (`v_schedule_and_results`.`status` = 'FINAL');
-
-
-# Replace placeholder table for v_bet_records_unsummed with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_bet_records_unsummed`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_bet_records_unsummed`
-AS select
-   `b`.`user_id` AS `user_id`,
-   `b`.`season` AS `season`,
-   `b`.`week_number` AS `week_number`,
-   `b`.`week_type` AS `week_type`,
-   `b`.`game_id` AS `game_id`,
-   `b`.`team_id` AS `team_id`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` = `b`.`team_id`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_h_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` <> `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_h_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` is not null) and (`gr`.`winning_team_id` <> `b`.`team_id`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_h_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` = `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_h_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` = `b`.`team_id`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_h_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` <> `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_h_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` is not null) and (`gr`.`winning_team_id` <> `b`.`team_id`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_h_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` = `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_h_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_a_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_a_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_a_reg_push`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_a_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_a_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_a_rev_push`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_a_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_a_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_a_reg_push`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_a_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_a_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_a_rev_push`
-from ((`bets` `b` join `game_results` `gr` on((`gr`.`game_id` = `b`.`game_id`))) join `spread` `s` on((`b`.`spread_id` = `s`.`id`)));
-
-
-# Replace placeholder table for v_full_records_unsummed with correct view syntax
-# ------------------------------------------------------------
-
-DROP TABLE `v_full_records_unsummed`;
-CREATE ALGORITHM=UNDEFINED VIEW `v_full_records_unsummed`
-AS select
-   `v_schedule_and_results`.`game_id` AS `game_id`,
-   `v_schedule_and_results`.`season` AS `season`,
-   `v_schedule_and_results`.`home_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and `ot`.`conference` and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and `ot`.`conference` and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_tied`,(case when ((`v_schedule_and_results`.`home_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_won`,(case when ((`v_schedule_and_results`.`home_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_tied`
-from ((`v_schedule_and_results` join `teams` `t` on((`t`.`id` = `v_schedule_and_results`.`home_team_id`))) join `teams` `ot` on((`ot`.`id` = `v_schedule_and_results`.`away_team_id`)))
-where (`v_schedule_and_results`.`status` = 'FINAL') union all select `v_schedule_and_results`.`game_id` AS `game_id`,`v_schedule_and_results`.`season` AS `season`,`v_schedule_and_results`.`away_team_id` AS `team_id`,(case when (`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null)) then 1 else 0 end) AS `lost`,(case when isnull(`v_schedule_and_results`.`winning_team_id`) then 1 else 0 end) AS `tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` = `ot`.`conference`)) then 1 else 0 end) AS `conference_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`t`.`conference` <> `ot`.`conference`)) then 1 else 0 end) AS `nonconference_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `afc_north_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `afc_south_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `afc_east_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'AFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `afc_west_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'North')) then 1 else 0 end) AS `nfc_north_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'South')) then 1 else 0 end) AS `nfc_south_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'East')) then 1 else 0 end) AS `nfc_east_tied`,(case when ((`v_schedule_and_results`.`away_team_id` = `v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_won`,(case when ((`v_schedule_and_results`.`away_team_id` <> `v_schedule_and_results`.`winning_team_id`) and (`v_schedule_and_results`.`winning_team_id` is not null) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_lost`,(case when (isnull(`v_schedule_and_results`.`winning_team_id`) and (`ot`.`conference` = 'NFC') and (`ot`.`division` = 'West')) then 1 else 0 end) AS `nfc_west_tied` from ((`v_schedule_and_results` join `teams` `t` on((`t`.`id` = `v_schedule_and_results`.`away_team_id`))) join `teams` `ot` on((`ot`.`id` = `v_schedule_and_results`.`home_team_id`)))
-where (`v_schedule_and_results`.`status` = 'FINAL');
 
 
 # Replace placeholder table for v_teams_with_records with correct view syntax
@@ -1120,6 +869,95 @@ AS select
    `full_records`.`afc_west_tied` AS `afc_west_tied`
 from (`teams` join `full_records` on((`teams`.`id` = `full_records`.`team_id`)));
 
+
+# Replace placeholder table for v_bet_records with correct view syntax
+# ------------------------------------------------------------
+
+DROP TABLE `v_bet_records`;
+CREATE ALGORITHM=UNDEFINED VIEW `v_bet_records`
+AS select
+   `v_bet_records_unsummed`.`user_id` AS `user_id`,
+   `v_bet_records_unsummed`.`season` AS `season`,sum(`v_bet_records_unsummed`.`s_h_reg_won`) AS `s_h_reg_won`,sum(`v_bet_records_unsummed`.`s_h_reg_lost`) AS `s_h_reg_lost`,sum(`v_bet_records_unsummed`.`s_h_rev_won`) AS `s_h_rev_won`,sum(`v_bet_records_unsummed`.`s_h_rev_lost`) AS `s_h_rev_lost`,sum(`v_bet_records_unsummed`.`p_h_reg_won`) AS `p_h_reg_won`,sum(`v_bet_records_unsummed`.`p_h_reg_lost`) AS `p_h_reg_lost`,sum(`v_bet_records_unsummed`.`p_h_rev_won`) AS `p_h_rev_won`,sum(`v_bet_records_unsummed`.`p_h_rev_lost`) AS `p_h_rev_lost`,sum(`v_bet_records_unsummed`.`s_a_reg_won`) AS `s_a_reg_won`,sum(`v_bet_records_unsummed`.`s_a_reg_lost`) AS `s_a_reg_lost`,sum(`v_bet_records_unsummed`.`s_a_reg_push`) AS `s_a_reg_push`,sum(`v_bet_records_unsummed`.`s_a_rev_won`) AS `s_a_rev_won`,sum(`v_bet_records_unsummed`.`s_a_rev_lost`) AS `s_a_rev_lost`,sum(`v_bet_records_unsummed`.`s_a_reg_push`) AS `s_a_rev_push`,sum(`v_bet_records_unsummed`.`p_a_reg_won`) AS `p_a_reg_won`,sum(`v_bet_records_unsummed`.`p_a_reg_lost`) AS `p_a_reg_lost`,sum(`v_bet_records_unsummed`.`p_a_reg_push`) AS `p_a_reg_push`,sum(`v_bet_records_unsummed`.`p_a_rev_won`) AS `p_a_rev_won`,sum(`v_bet_records_unsummed`.`p_a_rev_lost`) AS `p_a_rev_lost`,sum(`v_bet_records_unsummed`.`p_a_reg_push`) AS `p_a_rev_push`
+from `v_bet_records_unsummed` group by `v_bet_records_unsummed`.`user_id`,`v_bet_records_unsummed`.`season`;
+
+
+# Replace placeholder table for v_bets_with_users_teams_results with correct view syntax
+# ------------------------------------------------------------
+
+DROP TABLE `v_bets_with_users_teams_results`;
+CREATE ALGORITHM=UNDEFINED VIEW `v_bets_with_users_teams_results`
+AS select
+   `bets`.`id` AS `id`,
+   `bets`.`created_at` AS `created_at`,
+   `bets`.`updated_at` AS `updated_at`,
+   `bets`.`user_id` AS `user_id`,
+   `bets`.`season` AS `season`,
+   `bets`.`week_number` AS `week_number`,
+   `bets`.`week_type` AS `week_type`,
+   `bets`.`game_id` AS `game_id`,
+   `bets`.`team_id` AS `team_id`,
+   `bets`.`spread_id` AS `spread_id`,
+   `bets`.`bet_set_id` AS `bet_set_id`,
+   `bets`.`survival_pickem` AS `survival_pickem`,
+   `bets`.`headsup_ats` AS `headsup_ats`,
+   `bets`.`regular_reverse` AS `regular_reverse`,
+   `users`.`username` AS `username`,
+   `teams`.`name` AS `team_name`,
+   `teams`.`short_name` AS `short_name`,
+   `game_results`.`status` AS `status`,
+   `game_results`.`winning_team_id` AS `winning_team_id`
+from (((`bets` join `users` on((`users`.`id` = `bets`.`user_id`))) join `teams` on((`bets`.`team_id` = `teams`.`id`))) join `game_results` on((`bets`.`game_id` = `game_results`.`game_id`)));
+
+
+# Replace placeholder table for v_schedule_and_results with correct view syntax
+# ------------------------------------------------------------
+
+DROP TABLE `v_schedule_and_results`;
+CREATE ALGORITHM=UNDEFINED VIEW `v_schedule_and_results`
+AS select
+   `s`.`game_id` AS `game_id`,
+   `s`.`season` AS `season`,
+   `s`.`week_number` AS `week_number`,
+   `s`.`week_type` AS `week_type`,
+   `s`.`home_team_id` AS `home_team_id`,
+   `s`.`away_team_id` AS `away_team_id`,
+   `s`.`game_time` AS `game_time`,
+   `gr`.`home_score` AS `home_score`,
+   `gr`.`away_score` AS `away_score`,
+   `gr`.`game_clock` AS `game_clock`,
+   `gr`.`quarter` AS `quarter`,
+   `gr`.`status` AS `status`,
+   `gr`.`possession` AS `possession`,
+   `gr`.`in_red_zone` AS `in_red_zone`,
+   `gr`.`winning_team_id` AS `winning_team_id`
+from (`schedule` `s` join `game_results` `gr` on((`s`.`game_id` = `gr`.`game_id`)));
+
+
+# Replace placeholder table for v_team_statistics with correct view syntax
+# ------------------------------------------------------------
+
+DROP TABLE `v_team_statistics`;
+CREATE ALGORITHM=UNDEFINED VIEW `v_team_statistics`
+AS select
+   `gs`.`team_id` AS `team_id`,
+   `schedule`.`season` AS `season`,sum(`gs`.`points`) AS `total_points`,avg(`gs`.`points`) AS `avg_points`,sum(`gs`.`turnovers`) AS `total_turnovers`,avg(`gs`.`turnovers`) AS `avg_turnovers`,sum(`gs`.`rushing_yards`) AS `total_rushing_yards`,avg(`gs`.`rushing_yards`) AS `avg_rushing_yards`,sum(`gs`.`passing_yards`) AS `total_passing_yards`,avg(`gs`.`passing_yards`) AS `avg_passing_yards`,sum(`gs`.`passing_completions`) AS `total_passing_completions`,avg(`gs`.`passing_completions`) AS `avg_passing_completions`,sum(`gs`.`sacks`) AS `total_sacks`,avg(`gs`.`sacks`) AS `avg_sacks`,sum(`gs`.`sack_yards_lost`) AS `total_sack_yards_lost`,avg(`gs`.`sack_yards_lost`) AS `avg_sack_yards_lost`,sum(`gs`.`interceptions_thrown`) AS `total_interceptions_thrown`,avg(`gs`.`interceptions_thrown`) AS `avg_interceptions_thrown`,sum(`gs`.`interception_return_yards`) AS `total_interception_return_yards`,avg(`gs`.`interception_return_yards`) AS `avg_interception_return_yards`,sum(`gs`.`interception_returns`) AS `total_interception_returns`,avg(`gs`.`interception_returns`) AS `avg_interception_returns`,sum(`gs`.`rushing_1st_downs`) AS `total_rushing_1st_downs`,avg(`gs`.`rushing_1st_downs`) AS `avg_rushing_1st_downs`,sum(`gs`.`passing_1st_downs`) AS `total_passing_1st_downs`,avg(`gs`.`passing_1st_downs`) AS `avg_passing_1st_downs`,sum(`gs`.`penalty_1st_downs`) AS `total_penalty_1st_downs`,avg(`gs`.`penalty_1st_downs`) AS `avg_penalty_1st_downs`,sum(`gs`.`third_down_attempts`) AS `total_third_down_attempts`,avg(`gs`.`third_down_attempts`) AS `avg_third_down_attempts`,sum(`gs`.`third_down_conversions`) AS `total_third_down_conversions`,avg(`gs`.`third_down_conversions`) AS `avg_third_down_conversions`,sum(`gs`.`fourth_down_attempts`) AS `total_fourth_down_attempts`,avg(`gs`.`fourth_down_attempts`) AS `avg_fourth_down_attempts`,sum(`gs`.`fourth_down_conversions`) AS `total_fourth_down_conversions`,avg(`gs`.`fourth_down_conversions`) AS `avg_fourth_down_conversions`,sum(`gs`.`punts`) AS `total_punts`,avg(`gs`.`punts`) AS `avg_punts`,sum(`gs`.`punts_blocked`) AS `total_punts_blocked`,avg(`gs`.`punts_blocked`) AS `avg_punts_blocked`,sum(`gs`.`punt_average_distance`) AS `total_punt_average_distance`,avg(`gs`.`punt_average_distance`) AS `avg_punt_average_distance`,sum(`gs`.`punt_net_average`) AS `total_punt_net_average`,avg(`gs`.`punt_net_average`) AS `avg_punt_net_average`,sum(`gs`.`punt_returns`) AS `total_punt_returns`,avg(`gs`.`punt_returns`) AS `avg_punt_returns`,sum(`gs`.`punt_return_yards`) AS `total_punt_return_yards`,avg(`gs`.`punt_return_yards`) AS `avg_punt_return_yards`,sum(`gs`.`kickoffs`) AS `total_kickoffs`,avg(`gs`.`kickoffs`) AS `avg_kickoffs`,sum(`gs`.`kickoffs_in_endzone`) AS `total_kickoffs_in_endzone`,avg(`gs`.`kickoffs_in_endzone`) AS `avg_kickoffs_in_endzone`,sum(`gs`.`kickoffs_touchback`) AS `total_kickoffs_touchback`,avg(`gs`.`kickoffs_touchback`) AS `avg_kickoffs_touchback`,sum(`gs`.`kickoff_returns`) AS `total_kickoff_returns`,avg(`gs`.`kickoff_returns`) AS `avg_kickoff_returns`,sum(`gs`.`kickoff_return_yards`) AS `total_kickoff_return_yards`,avg(`gs`.`kickoff_return_yards`) AS `avg_kickoff_return_yards`,sum(`gs`.`penalties`) AS `total_penalties`,avg(`gs`.`penalties`) AS `avg_penalties`,sum(`gs`.`penalty_yards`) AS `total_penalty_yards`,avg(`gs`.`penalty_yards`) AS `avg_penalty_yards`,sum(`gs`.`fumbles`) AS `total_fumbles`,avg(`gs`.`fumbles`) AS `avg_fumbles`,sum(`gs`.`fumbles_lost`) AS `total_fumbles_lost`,avg(`gs`.`fumbles_lost`) AS `avg_fumbles_lost`,sum(`gs`.`time_of_possession`) AS `total_time_of_possession`,avg(`gs`.`time_of_possession`) AS `avg_time_of_possession`,sum(`gs`.`rushing_tds`) AS `total_rushing_tds`,avg(`gs`.`rushing_tds`) AS `avg_rushing_tds`,sum(`gs`.`passing_tds`) AS `total_passing_tds`,avg(`gs`.`passing_tds`) AS `avg_passing_tds`,sum(`gs`.`other_tds`) AS `total_other_tds`,avg(`gs`.`other_tds`) AS `avg_other_tds`,sum(`gs`.`xp_attempts`) AS `total_xp_attempts`,avg(`gs`.`xp_attempts`) AS `avg_xp_attempts`,sum(`gs`.`xp_conversions`) AS `total_xp_conversions`,avg(`gs`.`xp_conversions`) AS `avg_xp_conversions`,sum(`gs`.`xp_blocked`) AS `total_xp_blocked`,avg(`gs`.`xp_blocked`) AS `avg_xp_blocked`,sum(`gs`.`fg_attempts`) AS `total_fg_attempts`,avg(`gs`.`fg_attempts`) AS `avg_fg_attempts`,sum(`gs`.`fg_conversions`) AS `total_fg_conversions`,avg(`gs`.`fg_conversions`) AS `avg_fg_conversions`,sum(`gs`.`fg_blocked`) AS `total_fg_blocked`,avg(`gs`.`fg_blocked`) AS `avg_fg_blocked`,sum(`gs`.`goal_to_go_attempts`) AS `total_goal_to_go_attempts`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_attempts`,sum(`gs`.`goal_to_go_successes`) AS `total_goal_to_go_successes`,avg(`gs`.`goal_to_go_attempts`) AS `avg_goal_to_go_successes`,sum(`gs`.`red_zone_attempts`) AS `total_red_zone_attempts`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_attempts`,sum(`gs`.`red_zone_successes`) AS `total_red_zone_successes`,avg(`gs`.`red_zone_attempts`) AS `avg_red_zone_successes`,sum(`gs`.`safeties`) AS `total_safeties`,avg(`gs`.`safeties`) AS `avg_safeties`
+from (`game_stats` `gs` join `schedule` on((`schedule`.`game_id` = `gs`.`game_id`))) group by `gs`.`team_id`,`schedule`.`season`;
+
+
+# Replace placeholder table for v_bet_records_unsummed with correct view syntax
+# ------------------------------------------------------------
+
+DROP TABLE `v_bet_records_unsummed`;
+CREATE ALGORITHM=UNDEFINED VIEW `v_bet_records_unsummed`
+AS select
+   `b`.`user_id` AS `user_id`,
+   `b`.`season` AS `season`,
+   `b`.`week_number` AS `week_number`,
+   `b`.`week_type` AS `week_type`,
+   `b`.`game_id` AS `game_id`,
+   `b`.`team_id` AS `team_id`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` = `b`.`team_id`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_h_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` <> `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_h_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` is not null) and (`gr`.`winning_team_id` <> `b`.`team_id`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_h_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` = `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_h_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` = `b`.`team_id`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_h_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` <> `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_h_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and (`gr`.`winning_team_id` is not null) and (`gr`.`winning_team_id` <> `b`.`team_id`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_h_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`winning_team_id` = `b`.`team_id`) or isnull(`gr`.`winning_team_id`)) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 0) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_h_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_a_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_a_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `s_a_reg_push`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_a_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_a_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 0) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `s_a_rev_push`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_a_reg_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_a_reg_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 0)) then 1 else 0 end) AS `p_a_reg_push`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) > `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_a_rev_won`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) < `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_a_rev_lost`,(case when ((`gr`.`status` = 'FINAL') and ((`gr`.`away_score` - `gr`.`home_score`) = `s`.`spread`) and (`b`.`survival_pickem` = 1) and (`b`.`headsup_ats` = 1) and (`b`.`regular_reverse` = 1)) then 1 else 0 end) AS `p_a_rev_push`
+from ((`bets` `b` join `game_results` `gr` on((`gr`.`game_id` = `b`.`game_id`))) join `spread` `s` on((`b`.`spread_id` = `s`.`id`)));
+
 --
 -- Dumping routines (PROCEDURE) for database 'eliminator'
 --
@@ -1139,6 +977,12 @@ team_id,season,
 sum(won) as won,
 sum(lost) as lost,
 sum(tied) as tied,
+sum(home_won) as home_won,
+sum(home_lost) as home_lost,
+sum(home_tied) as home_tied,
+sum(away_won) as away_won,
+sum(away_lost) as away_lost,
+sum(away_tied) as away_tied,
 sum(conference_won) as conference_won,
 sum(conference_lost) as conference_lost,
 sum(conference_tied) as conference_tied,
@@ -1173,6 +1017,12 @@ from (select game_id,season,home_team_id as team_id,
 case when (home_team_id = winning_team_id) then 1 else 0 end as won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null) then 1 else 0 end as lost,
 case when (winning_team_id is null) then 1 else 0 end as tied,
+
+case when (home_team_id = winning_team_id) then 1 else 0 end as home_won,
+case when (home_team_id <> winning_team_id and winning_team_id is not null) then 1 else 0 end as home_lost,
+case when (winning_team_id is null) then 1 else 0 end as home_tied,
+
+0 as away_won, 0 as away_lost, 0 as away_tied,
 
 case when (home_team_id = winning_team_id and t.conference = ot.conference) then 1 else 0 end as conference_won,
 case when (home_team_id <> winning_team_id and winning_team_id is not null and t.conference = ot.conference) then 1 else 0 end as conference_lost,
@@ -1222,6 +1072,13 @@ select game_id,season,away_team_id as team_id,
 case when (away_team_id = winning_team_id) then 1 else 0 end as won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null) then 1 else 0 end as lost,
 case when (winning_team_id is null) then 1 else 0 end as tied,
+
+0 as home_won, 0 as home_lost, 0 as home_tied,
+
+case when (away_team_id = winning_team_id) then 1 else 0 end as away_won,
+case when (away_team_id <> winning_team_id and winning_team_id is not null) then 1 else 0 end as away_lost,
+case when (winning_team_id is null) then 1 else 0 end as away_tied,
+
 
 case when (away_team_id = winning_team_id and t.conference = ot.conference) then 1 else 0 end as conference_won,
 case when (away_team_id <> winning_team_id and winning_team_id is not null and t.conference = ot.conference) then 1 else 0 end as conference_lost,

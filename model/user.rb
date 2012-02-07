@@ -1,4 +1,5 @@
 class User
+    self.plugin :timestamps
     include BCrypt
 
     one_to_many :owned_groups, :class => Group, :key => :owner_id

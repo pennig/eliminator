@@ -16,8 +16,6 @@ class GroupController < Controller
         if request.post?
             @group = Group.new(
                 :owner_id => user.id,
-                :created_at => Time.now,
-                :updated_at => Time.now,
                 :name => request[:name],
                 :public => request[:public] || false,
                 :visible => request[:visible] || false,
@@ -29,12 +27,17 @@ class GroupController < Controller
                 :reverse_allowed => request[:reverse_allowed] || false
             )
 
+
             errors = @group.validate
             if not errors.empty?
                 flash[:message] = errors[0]
             else
                 flash[:message] = "Group created"
                 @group.save
+                GroupMember.create(
+                    :group_id => @group.id,
+                    :user_id => user.id
+                )
                 redirect GroupController.r(:view, @group.id)
             end
         else
@@ -98,7 +101,7 @@ class GroupController < Controller
     def leave(group_id)
         login_required
         group = Group[group_id]
-        group.remove_member(user.id) if group.is_member?(user.id)
+        group.remove_member(user.id) if group.is_member?(user.id) and group.owner_id != user.id
         redirect GroupController.r(:view, group_id)
     end
 

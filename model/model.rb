@@ -4,6 +4,22 @@ require 'bcrypt'
 
 class BetSet < Sequel::Model(:bet_sets)
     self.db = $db_connection
+
+    def friendly_name
+        link_array = []
+        if self.regular_reverse
+            link_array.push("Reverse")
+        end
+        if self.headsup_ats
+            link_array.push("ATS")
+        end
+        if self.survival_pickem
+            link_array.push("Pickem")
+        else
+            link_array.push("Eliminator")
+        end
+        link_array.join(" ")
+    end
 end
 
 class Bet < Sequel::Model(:bets)
@@ -22,11 +38,12 @@ class GroupFeature < Sequel::Model(:group_features)
     self.db = $db_connection
 end
 
-class Group < Sequel::Model(:groups)
+class GroupMember < Sequel::Model(:group_members)
+    self.plugin :timestamps
     self.db = $db_connection
 end
 
-class GroupMember < Sequel::Model(:group_members)
+class Group < Sequel::Model(:groups)
     self.db = $db_connection
 end
 
@@ -48,6 +65,7 @@ class Schedule < Sequel::Model(:schedule)
 end
 
 class Spread < Sequel::Model(:spread)
+    self.plugin :timestamps
     self.db = $db_connection
 end
 
@@ -77,13 +95,6 @@ class VScheduleAndResults < Sequel::Model(:v_schedule_and_results)
     many_to_one :home_team, :class => Team, :key => :home_team_id
     many_to_one :away_team, :class => Team, :key => :away_team_id
 
-    self.db = $db_connection
-end
-
-class VTeamRecord < Sequel::Model(:v_team_records)
-    self.db = $db_connection
-end
-class VFullRecord < Sequel::Model(:v_full_records)
     self.db = $db_connection
 end
 

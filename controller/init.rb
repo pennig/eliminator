@@ -20,6 +20,13 @@ class Controller < Ramaze::Controller
     def current_season
         2011
     end
+    def current_week_type
+        "REG"
+    end
+
+    def current_week_number
+        17
+    end
 
     def controller_name
         self.class.name.gsub("Controller", "").downcase.to_sym

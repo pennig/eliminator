@@ -1,5 +1,5 @@
 class ScheduleController < Controller
-    def index(season=current_season, week_type=current_week_type, week_number = current_week_number)
+    def index(season=current_season, week_type=current_week_type, week_number = "all")
         @title = "Schedule for #{season} Week #{week_number}"
         @season = season
         @season_path = build_path
@@ -11,15 +11,4 @@ class ScheduleController < Controller
 
         @schedule = dataset.all
     end
-
-    private
-
-    def current_week_type
-        "REG"
-    end
-
-    def current_week_number
-        "all"
-    end
-
 end

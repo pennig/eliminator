@@ -20,8 +20,7 @@ class RegisterController < Controller
             @user = User.new(
                 :username => request[:username],
                 :password => request[:password],
-                :email => request[:email],
-                :created_at => Time.now
+                :email => request[:email]
             )
             errors = @user.validate
             if request[:password].nil? or request[:password].empty?
