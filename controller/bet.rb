@@ -24,8 +24,6 @@ class BetController < Controller
         login_required
 
         bet = Bet.new(
-            :created_at => Time.now,
-            :updated_at => Time.now,
             :user_id => user.id,
             :season => current_season,
             :week_number => week_number,

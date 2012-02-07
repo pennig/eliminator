@@ -1,4 +1,5 @@
 class Bet
+    self.plugin :timestamps
     def validate(user,current_season,current_week_type,current_week_number)
         game = Schedule.where(:game_id => self.game_id).first
         if game.nil?
