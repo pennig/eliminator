@@ -3,7 +3,7 @@
         <ul class="nav nav-list">
             <li class="nav-header">Public <i class="icon-pencil"></i></li>
             <?r @bet_sets.where(:group_id => nil).each do |bet_set| ?>
-            <li><a href="#">#{bet_set.friendly_name}</a></li>
+            <li><a href="#{current_week_type}/#{current_week_number}/#{bet_set.id}" class="bet-set">#{bet_set.friendly_name}</a></li>
             <?r end ?>
             <?r user.joined_groups.each do |group| ?>
             <li class="nav-header">#{group.name} <i class="icon-pencil"></i></li>
@@ -13,68 +13,23 @@
             <?r end ?>
         </ul>
     </div>
-    <div class="span10">
-        <div class="row">
-            <div class="span5">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Bet</th>
-                            <th>Team</th>
-                            <th>Record</th>
-                            <th>Away<br>Home</th>
-                            <th>Spread</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?r @games_left_col.each do |game| ?>
-                        <tr>
-                            <td rowspan="2"><img src="/images/teams-lg/#{game.away_team.short_name.downcase}.png"></td>
-                            <td rowspan="2"><img src="/images/teams-lg/#{game.home_team.short_name.downcase}.png"></td>
-                            <td><a href="/team/#{current_season}/#{game.away_team.short_name}">#{game.away_team.name}</a></td>
-                            <td>#{game.away_team.record(current_season)[:won].to_i}-#{game.away_team.record(current_season)[:lost].to_i}-#{game.away_team.record(current_season)[:tied].to_i}</td>
-                            <td>#{game.away_team.record(current_season)[:away_won].to_i}-#{game.away_team.record(current_season)[:away_lost].to_i}-#{game.away_team.record(current_season)[:away_tied].to_i}</td>
-                            <td rowspan="2">#{Spread.where(:game_id => game.game_id).order(:id.desc).limit(1).first.spread}</td>
-                        </tr>
-                        <tr>
-                            <td><a href="/team/#{current_season}/#{game.home_team.short_name}">#{game.home_team.name}</a></td>
-                            <td>#{game.home_team.record(current_season)[:won].to_i}-#{game.home_team.record(current_season)[:lost].to_i}-#{game.home_team.record(current_season)[:tied].to_i}</td>
-                            <td>#{game.home_team.record(current_season)[:home_won].to_i}-#{game.home_team.record(current_season)[:home_lost].to_i}-#{game.home_team.record(current_season)[:home_tied].to_i}</td>
-                        </tr>
-                        <?r end ?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="span5">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Bet</th>
-                            <th>Team</th>
-                            <th>Record</th>
-                            <th>Away<br>Home</th>
-                            <th>Spread</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?r @games_right_col.each do |game| ?>
-                        <tr>
-                            <td rowspan="2"><img src="/images/teams-lg/#{game.away_team.short_name.downcase}.png"></td>
-                            <td rowspan="2"><img src="/images/teams-lg/#{game.home_team.short_name.downcase}.png"></td>
-                            <td><a href="/team/#{current_season}/#{game.away_team.short_name}">#{game.away_team.name}</a></td>
-                            <td>#{game.away_team.record(current_season)[:won].to_i}-#{game.away_team.record(current_season)[:lost].to_i}-#{game.away_team.record(current_season)[:tied].to_i}</td>
-                            <td>#{game.away_team.record(current_season)[:away_won].to_i}-#{game.away_team.record(current_season)[:away_lost].to_i}-#{game.away_team.record(current_season)[:away_tied].to_i}</td>
-                            <td rowspan="2">#{Spread.where(:game_id => game.game_id).order(:id.desc).limit(1).first.spread}</td>
-                        </tr>
-                        <tr>
-                            <td><a href="/team/#{current_season}/#{game.home_team.short_name}">#{game.home_team.name}</a></td>
-                            <td>#{game.home_team.record(current_season)[:won].to_i}-#{game.home_team.record(current_season)[:lost].to_i}-#{game.home_team.record(current_season)[:tied].to_i}</td>
-                            <td>#{game.home_team.record(current_season)[:home_won].to_i}-#{game.home_team.record(current_season)[:home_lost].to_i}-#{game.home_team.record(current_season)[:home_tied].to_i}</td>
-                        </tr>
-                        <?r end ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+    <div class="span10" id="bet-container">
+        #{render_partial :bet_table, {:bets => @bets, :games_left_col => @games_left_col, :games_right_col => @games_right_col}}
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $("ul.nav-list li a:first").parent().addClass("active"); //go ahead and hate me Matt. consider this all proof of concept
+    $("ul.nav-list a.bet-set").click(function(event) {
+        //href is week_type/week_number/bet_set_id
+        var params = $(this).attr("href").split("/");
+        $("ul.nav-list li").removeClass("active");
+        $(this).parent().addClass("active");
+        $("#bet-container").css("opacity","0.3");
+        $.get("/bet/bet_table/"+params[0]+"/"+params[1]+"/"+params[2], function(response) {
+            $("#bet-container").html(response).css("opacity","1");
+        });
+        return false;
+    });
+});
+</script>

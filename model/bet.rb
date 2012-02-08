@@ -1,10 +1,13 @@
 class Bet
     self.plugin :timestamps
-    def validate(user,current_season,current_week_type,current_week_number)
+    def valid_bet?(user,current_season,current_week_type,current_week_number)
         game = Schedule.where(:game_id => self.game_id).first
         if game.nil?
             raise StandardError, "Invalid game"
         end
+        #if game.game_time <= Time.now
+        #    raise StandardError, "You can't bet on games that have already kicked off"
+        #end
         if game.season < current_season
             raise StandardError, "You can only bet on this season"
         end
@@ -32,16 +35,22 @@ class Bet
         self.regular_reverse = bet_set.regular_reverse
 
         #split off into helper methods that check the correctness of the 8 diff game types?
-        if self.survival_pickem == 0
-            validate_survival(current_season,current_week_type,current_week_number)
-        elsif self.survival_pickem == 1
+        if self.survival_pickem == false
+            validate_survival(user,current_season,current_week_type,current_week_number)
+        elsif self.survival_pickem == true
             validate_pickem
         end
     end
 
     private
 
-    def validate_survival(current_season,current_week_type,current_week_number)
+    def validate_survival(user,current_season,current_week_type,current_week_number)
+        puts "validating survival bet"
+        if Bet.where( :bet_set_id => bet_set_id, :user_id => user.id, :season => current_season, :team_id => self.team_id).count > 0
+            raise StandardError, "You have already bet on this team this season"
+        end
+
+
         previous_bet = Bet.where(
             :bet_set_id => self.bet_set_id,
             :user_id => user.id,
@@ -49,9 +58,16 @@ class Bet
             :week_type => current_week_type,
             :week_number => current_week_number
         ).first
+        puts Bet.where(
+            :bet_set_id => self.bet_set_id,
+            :user_id => user.id,
+            :season => current_season,
+            :week_type => current_week_type,
+            :week_number => current_week_number
+        ).sql
         if not previous_bet.nil?
-            #we already have a bet for this. we should update it, but instead we'll throw an error for now
-            raise StandardError, "Better error goes here, but you can't bet twice."
+            puts "found previous bet, deleting"
+            previous_bet.delete
         end
     end
 
@@ -62,8 +78,8 @@ class Bet
             :user_id => user.id
         ).first
         if not previous_bet.nil?
-            #we already have a bet for this game. we should update it, but instead we'll throw an error for now
-            raise StandardError, "Better error goes here, but you can't bet twice."
+            puts "found previous bet, deleting"
+            previous_bet.delete
         end
     end
 

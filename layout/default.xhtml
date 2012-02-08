@@ -31,8 +31,11 @@
                             <li class="#{"active" if controller_name == :ranking}">
                                 <a href="/statistics/offense/#{@season}">Statistics</a>
                             </li>
-                            <li class="#{"active" if controller_name == :bet}">
-                                <a href="/bet/view/#{@season || current_season}/REG/1/survival/h/reg">Bets</a>
+                            <li class="#{"active" if (request.env["SCRIPT_NAME"]+request.env["PATH_INFO"]).match(/bet\/view/)}">
+                                <a href="/bet/view/#{@season || current_season}/REG/1/survival/h/reg">View Bets</a>
+                            </li>
+                            <li class="#{"active" if (request.env["SCRIPT_NAME"]+request.env["PATH_INFO"]).match(/bet\/choose/)}">
+                                <a href="/bet/choose">Place Bet</a>
                             </li>
                             <li class="#{"active" if controller_name == :group}">
                                 <a href="/group">Groups</a>
