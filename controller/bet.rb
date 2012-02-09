@@ -34,7 +34,7 @@ class BetController < Controller
             :team_id => team_id,
             :bet_set_id => bet_set_id
         )
-        bet.valid_bet?(user,current_season,current_week_type,current_week_number)
+        bet.valid_bet?(current_season,current_week_type,current_week_number)
         bet.save
         "{success:true}"
     end
@@ -113,11 +113,13 @@ class BetController < Controller
             :week_number => week_number,
             :bet_set_id => bet_set_id
         )
-        schedule = Schedule.join(:spread,:game_id => :game_id).where(
+        #TODO: this join needs to get the latest spread...so it's wrong right now
+        schedule = Schedule.left_outer_join(:spread,:game_id => :game_id).where(
             :season => season,
             :week_type => week_type,
             :week_number => week_number
-        )
+        ).select(:schedule.*,'spread.spread'.lit)
+
         i = 0
         games_left_col = []
         games_right_col = []

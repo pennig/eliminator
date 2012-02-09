@@ -18,14 +18,14 @@ class Controller < Ramaze::Controller
     end
 
     def current_season
-        2011
+        2012
     end
     def current_week_type
         "REG"
     end
 
     def current_week_number
-        17
+        1
     end
 
     def controller_name

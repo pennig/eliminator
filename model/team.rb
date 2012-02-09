@@ -20,7 +20,17 @@ class Team
         if season.nil?
             FullRecord.where(:team_id => self.id).to_hash(:season)
         else
-            FullRecord.where(:team_id => self.id, :season => season).first
+            full_record = FullRecord.where(:team_id => self.id, :season => season).first
+            if not full_record.nil?
+                full_record
+            else
+                #no games have been played for the season so the FullRecord table has no data
+                {
+                    :won => 0, :lost => 0, :tied => 0,
+                    :away_won => 0, :away_lost => 0, :away_tied => 0,
+                    :home_won => 0, :home_lost => 0, :home_tied => 0
+                }
+            end
         end
     end
 
