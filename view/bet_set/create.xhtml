@@ -1,0 +1,90 @@
+#{form_for(@form_data, :method => :post) do |f|
+    f.input_hidden :group_id
+    f.select("Game Type", :game_type, {:size => 1})
+    f.submit("Create", {:class => "btn btn-primary"})
+end}
+<style>
+    [class^="bet-description"] {
+        display: none;
+    }
+</style>
+<div>
+    <div class="bet-description-eliminator">
+        <h3>Classic Eliminator</h3>
+        <p>Pick one team each week. If they <strong>win</strong> you move on, if they lose you are eliminated. You can only pick each team once per season.</p>
+    </div>
+    <div class="bet-description-reverse-eliminator">
+        <h3>Reverse Eliminator</h3>
+        <p>Pick one team each week. If they <strong>lose</strong> you move on, if they win you are eliminated. You can only pick each team once per season.</p>
+    </div>
+    <div class="bet-description-ats-eliminator">
+        <h3>Against The Spread Eliminator</h3>
+        <p>Pick one team each week. If, after adjusting for the spread at the time you bet, they <strong>win</strong> then you live to fight another day. You can only pick each team once per season.</p>
+    </div>
+    <div class="bet-description-reverse-ats-eliminator">
+        <h3>Reverse Against The Spread Eliminator</h3>
+        <p>Pick one team each week. If, after adjusting for the spread at the time you bet, they <strong>lose</strong> then you live to fight another day. You can only pick each team once per season.</p>
+    </div>
+    <div class="bet-description-pickem">
+        <h3>Pick 'em</h3>
+        <p>Pick the winner of each game each week.</p>
+    </div>
+    <div class="bet-description-reverse-pickem">
+        <h3>Reverse Pick 'em</h3>
+        <p>Pick the loser of each game each week.</p>
+    </div>
+    <div class="bet-description-ats-pickem">
+        <h3>Against The Spread Pick 'em</h3>
+        <p>Pick the winner of each game each week. If, after adjusting for the spread at the time you bet, they still <strong>win</strong> then tally it up.</p>
+    </div>
+    <div class="bet-description-reverse-ats-pickem">
+        <h3>Reverse Against The Spread Pick 'em</h3>
+        <p>Pick the loser of each game each week. If, after adjusting for the spread at the time you bet, they still <strong>lose</strong> then tally it up.</p>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        function show_description(game_type) {
+            switch (game_type) {
+                default:
+                case "0|0|0":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-eliminator").show();
+                break;
+                case "0|0|1":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-reverse-eliminator").show();
+                break;
+                case "0|1|0":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-ats-eliminator").show();
+                break;
+                case "0|1|1":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-reverse-ats-eliminator").show();
+                break;
+                case "1|0|0":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-pickem").show();
+                break;
+                case "1|0|1":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-reverse-pickem").show();
+                break;
+                case "1|1|0":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-ats-pickem").show();
+                break;
+                case "1|1|1":
+                    $("[class^=bet-description]").hide();
+                    $(".bet-description-reverse-ats-pickem").show();
+                break;
+            }
+        }
+        show_description($("#form_game_types option:selected").val());
+        $("#form_game_types").change(function(event) {
+            var selected = $(this).find("option:selected");
+            show_description(selected.val());
+        });
+    });
+</script>

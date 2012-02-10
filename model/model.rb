@@ -4,22 +4,6 @@ require 'bcrypt'
 
 class BetSet < Sequel::Model(:bet_sets)
     self.db = $db_connection
-
-    def friendly_name
-        link_array = []
-        if self.regular_reverse
-            link_array.push("Reverse")
-        end
-        if self.headsup_ats
-            link_array.push("ATS")
-        end
-        if self.survival_pickem
-            link_array.push("Pickem")
-        else
-            link_array.push("Eliminator")
-        end
-        link_array.join(" ")
-    end
 end
 
 class Bet < Sequel::Model(:bets)

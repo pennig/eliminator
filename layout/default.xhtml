@@ -31,6 +31,9 @@
                             <li class="#{"active" if controller_name == :ranking}">
                                 <a href="/statistics/offense/#{@season}">Statistics</a>
                             </li>
+                            <li class="#{"active" if controller_name == :leaderboard}">
+                                <a href="/leaderboard/eliminator/#{@season}">Leaderboards</a>
+                            </li>
                             <li class="#{"active" if (request.env["SCRIPT_NAME"]+request.env["PATH_INFO"]).match(/bet\/view/)}">
                                 <a href="/bet/view/#{@season || current_season}/REG/1/survival/h/reg">View Bets</a>
                             </li>
