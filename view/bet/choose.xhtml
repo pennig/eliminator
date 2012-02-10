@@ -8,13 +8,13 @@
             <?r user.joined_groups.each do |group| ?>
             <li class="nav-header">#{group.name} <i class="icon-pencil"></i></li>
             <?r @bet_sets.where(:group_id => group.id).each do |bet_set| ?>
-            <li><a href="#">#{bet_set.friendly_name} <i class="icon-ok-sign"></i></a></li>
+            <li><a href="#{current_week_type}/#{current_week_number}/#{bet_set.id}" class="bet-set">#{bet_set.friendly_name}</a></li>
             <?r end ?>
             <?r end ?>
         </ul>
     </div>
     <div class="span10" id="bet-container">
-        #{render_partial :bet_table, {:bets => @bets, :games_left_col => @games_left_col, :games_right_col => @games_right_col}}
+        #{render_partial :bet_table}
     </div>
 </div>
 <script>

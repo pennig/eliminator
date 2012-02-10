@@ -1,3 +1,6 @@
+<?r if @data[:game_type] == "eliminator" ?>
+    #{render_file("view/generic_partials/eliminator_userbets.xhtml")}
+<?r end ?>
         <div class="row">
             <div class="span5">
                 <table class="table">
@@ -12,12 +15,12 @@
                     </thead>
                     <tbody>
                     <?r @data[:left_col].each do |game|
-                        if @data[:previous_bets] and @data[:previous_bets].empty? and @data[:previous_bets][game.home_team_id]
+                        if @data[:eliminator_bets_hash] and @data[:eliminator_bets_hash].empty? and @data[:eliminator_bets_hash][game.home_team_id]
                             used_team_home = "used-team"
                         else
                             used_team_home = ""
                         end
-                        if @data[:previous_bets] and @data[:previous_bets].empty? and @data[:previous_bets][game.away_team_id]
+                        if @data[:eliminator_bets_hash] and @data[:eliminator_bets_hash].empty? and @data[:eliminator_bets_hash][game.away_team_id]
                             used_team_away = "used-team"
                         else
                             used_team_away = ""
@@ -53,12 +56,12 @@
                     </thead>
                     <tbody>
                     <?r @data[:right_col].each do |game|
-                        if @data[:previous_bets] and @data[:previous_bets].empty? and @data[:previous_bets][game.home_team_id]
+                        if @data[:eliminator_bets_hash] and @data[:eliminator_bets_hash].empty? and @data[:eliminator_bets_hash][game.home_team_id]
                             used_team_home = "used-team"
                         else
                             used_team_home = ""
                         end
-                        if @data[:previous_bets] and @data[:previous_bets].empty? and @data[:previous_bets][game.away_team_id]
+                        if @data[:eliminator_bets_hash] and @data[:eliminator_bets_hash].empty? and @data[:eliminator_bets_hash][game.away_team_id]
                             used_team_away = "used-team"
                         else
                             used_team_away = ""
@@ -91,26 +94,37 @@
             }
         </style>
         <script>
+            var game_type = "#{@data[:game_type]}";
             $(document).ready(function() {
                 $('img.team-bet').click(function() {
-                    if (parseInt($(this).attr("data-game-time")) <= Math.round(new Date().getTime() / 1000)) {
+                    if (parseInt($(this).attr("data-game-time")) <= Math.round(new Date().getTime() / 1000) || $(this).filter(".selected-team").length > 0) {
                         //this game has already kicked off
                         return;
                     }
-                    $(this).parent().parent().find('.selected-team').removeClass('.selected-team');
                     $(this).parent().parent().css("opacity","0.3");
                     var game_id = $(this).attr("data-game-id");
                     var team_id = $(this).attr("data-team-id");
 
                     var el = this;
-                    $.get("/bet/place/#{current_week_type}/#{current_week_number}/#{@data[:bet_set].id}/"+game_id+"/"+team_id,function(response) {
+                    $.post("/bet/place/#{current_week_type}/#{current_week_number}/#{@data[:bet_set].id}/"+game_id+"/"+team_id).success(function(response) {
+                        response = $.parseJSON(response);
                         if(response.success) {
-                            $(el).parent().parent().css("opacity","1.0");
-                            $(el).addClass('.selected-team');
+                            var parent_row = $(el).parent().parent();
+                            parent_row.css("opacity","1.0")
+                            if (game_type == 'eliminator') {
+                                $('.selected-team').removeClass('selected-team');
+                            } else if (game_type == 'pickem') {
+                                parent_row.find('.selected-team').removeClass('selected-team');
+                            }
+                            $(el).addClass('selected-team');
                         } else {
-                            console.log("error! we should handle this");
+                            flash('error',response.error);
+                            $(el).parent().parent().css("opacity","1.0");
                         }
-                    },"json");
+                    });
                 });
             });
+            function flash(type,message) {
+                $('<div class="alert fade in alert-'+type+'" data-dismiss="alert"></div>').text(message).appendTo('#alert-wrapper');
+            }
         </script>

@@ -86,9 +86,13 @@
 
             <div class="row">
                 <div class="span12">
-                    <?r if not flash[:message].nil? ?>
-                    <div style="background-color: red; color: white; margin: 2em; padding: 1em;">#{flash[:message]}</div>
-                    <?r end ?>
+                    <div id="alert-wrapper">
+                        <?r if not flash[:message].nil? ?>
+                        <div class="alert fade in" data-dismiss="alert">
+                        #{flash[:message]}
+                        </div>
+                        <?r end ?>
+                    </div>
 
                     <div>
                         #{@content}

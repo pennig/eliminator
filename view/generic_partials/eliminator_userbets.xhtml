@@ -1,0 +1,22 @@
+<div class="row">
+        <!--span7 width-->
+        <table class="table" style="width:700px;margin:0 auto">
+            <tr>
+            <?r (1..17).each do |week_number| ?>
+                <th>#{week_number}</th>
+            <?r end ?>
+            </tr>
+            <tr>
+                <?r
+                #this var needs to be from User#eliminator_bets
+                @eliminator_bets.each do |week,bet|
+                if not bet.nil?
+                ?>
+                <td><a href="/team/info/#{bet.season}/#{bet[:short_name]}"><img src="/images/teams-sm/#{bet[:short_name]}.png"></a></td>
+                <?r else ?>
+                <td><img src="/images/teams-sm/spacer.png"></td>
+                <?r end ?>
+                <?r end ?>
+            </tr>
+        </table>
+</div>

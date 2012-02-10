@@ -105,4 +105,19 @@ class User
         end
         self.db[sql,self.id,season]
     end
+
+    def eliminator_bets(season,week_type,bet_set_id)
+        all_eliminator_bets = Bet.where(
+            :user_id => self.id,
+            :season => season,
+            :week_type => week_type,
+            :bet_set_id => bet_set_id
+        ).join(:teams, :bets__team_id => :teams__id).order(:week_number.asc).to_hash(:week_number)
+        (1..17).each do |week|
+            if not all_eliminator_bets.has_key?(week)
+                all_eliminator_bets[week] = nil
+            end
+        end
+        all_eliminator_bets
+    end
 end

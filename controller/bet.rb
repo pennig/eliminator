@@ -34,9 +34,13 @@ class BetController < Controller
             :team_id => team_id,
             :bet_set_id => bet_set_id
         )
-        bet.valid_bet?(current_season,current_week_type,current_week_number)
-        bet.save
-        "{success:true}"
+        begin
+            bet.valid_bet?(current_season,current_week_type,current_week_number)
+            bet.save
+            "{\"success\":true}"
+        rescue => e
+            "{\"error\":\"#{e.message}\"}"
+        end
     end
 
     def choose(week_type=current_week_type,week_number=current_week_number,bet_set_id=nil)
@@ -49,11 +53,13 @@ class BetController < Controller
         end
 
         @data = bet_table_data(week_type, week_number, bet_set_id)
+        @eliminator_bets = @data[:eliminator_bets]
     end
 
     #ajax call
     def bet_table(week_type, week_number, bet_set_id)
         @data = bet_table_data(week_type, week_number, bet_set_id)
+        @eliminator_bets = @data[:eliminator_bets]
     end
 
 
@@ -94,19 +100,20 @@ class BetController < Controller
         end
 
         if bet_set.survival_pickem == false
-            previous_bets = Bet.where(
-                :user_id => user.id,
-                :season => season,
-                :week_type => week_type,
-                :bet_set_id => bet_set_id
-            )
-            previous_bet_hash = {}
-            previous_bets.map(:team_id).each do |team_id|
-                previous_bet_hash[team_id] = true
+            game_type = "eliminator"
+
+            eliminator_bets = user.eliminator_bets(season,week_type,bet_set_id)
+            eliminator_bets_hash = {}
+            eliminator_bets.map do |week,bet|
+                if not bet.nil?
+                    eliminator_bets_hash[bet.team_id] = true
+                end
             end
+        else
+            game_type = "pickem"
         end
 
-        bets = Bet.where(
+        bets = VBetWithUserTeamResult.where(
             :user_id => user.id,
             :season => season,
             :week_type => week_type,
@@ -114,11 +121,11 @@ class BetController < Controller
             :bet_set_id => bet_set_id
         )
         #TODO: this join needs to get the latest spread...so it's wrong right now
-        schedule = Schedule.left_outer_join(:spread,:game_id => :game_id).where(
+        schedule = Schedule.select(:schedule.*,:spread__spread).left_outer_join(:spread,:game_id => :game_id).where(
             :season => season,
             :week_type => week_type,
             :week_number => week_number
-        ).select(:schedule.*,'spread.spread'.lit)
+        )
 
         i = 0
         games_left_col = []
@@ -131,6 +138,15 @@ class BetController < Controller
                 games_right_col.push(game)
             end
         end
-        {:bet_set => bet_set, :bets => bets, :bets_array => bets.map(:team_id), :previous_bets => previous_bet_hash, :left_col => games_left_col, :right_col => games_right_col }
+        {
+            :bet_set => bet_set,
+            :game_type => game_type,
+            :bets => bets,
+            :bets_array => bets.map(:team_id),
+            :eliminator_bets => eliminator_bets,
+            :eliminator_bets_hash => eliminator_bets_hash,
+            :left_col => games_left_col,
+            :right_col => games_right_col
+        }
     end
 end
