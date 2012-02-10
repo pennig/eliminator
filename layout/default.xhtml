@@ -35,7 +35,7 @@
                                 <a href="/leaderboard/eliminator/#{@season}">Leaderboards</a>
                             </li>
                             <li class="#{"active" if (request.env["SCRIPT_NAME"]+request.env["PATH_INFO"]).match(/bet\/view/)}">
-                                <a href="/bet/view/#{@season || current_season}/REG/1/survival/h/reg">View Bets</a>
+                                <a href="/bet/view/#{@season || current_season}/REG/1/eliminator/h/reg">View Bets</a>
                             </li>
                             <li class="#{"active" if (request.env["SCRIPT_NAME"]+request.env["PATH_INFO"]).match(/bet\/choose/)}">
                                 <a href="/bet/choose">Place Bet</a>

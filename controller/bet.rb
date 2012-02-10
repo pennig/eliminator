@@ -1,7 +1,7 @@
 class BetController < Controller
     layout(:default) { !request.xhr? }
 
-    def view(season,week_type,week_number,survival_pickem="survival",headsup_ats="h",regular_reverse="reg")
+    def view(season,week_type,week_number,survival_pickem="eliminator",headsup_ats="h",regular_reverse="reg")
         mode = parse_modes(survival_pickem,headsup_ats,regular_reverse)
         @title = "View Bets"
         @season = season
@@ -65,7 +65,7 @@ class BetController < Controller
 
     private
     def parse_modes(survival_pickem,headsup_ats,regular_reverse)
-        if survival_pickem == "survival"
+        if survival_pickem == "eliminator"
             survival_pickem = 0
         elsif survival_pickem == "pickem"
             survival_pickem = 1
