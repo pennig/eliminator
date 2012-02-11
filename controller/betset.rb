@@ -35,10 +35,17 @@ class BetSetController < Controller
                 @bet_set.save
             end
         end
-        @form_data = OpenStruct.new
-        @form_data.group_id = group_id
+        @form_data = build_form_data(group_id)
+    end
+
+    private
+    def build_form_data(group_id)
+        login_required
+
+        form_data = OpenStruct.new
+        form_data.group_id = group_id
         #for groups we need to actually build the list of types allowed
-        @form_data.game_type = {
+        form_data.game_type = {
             "0|0|0" => "Eliminator",
             "0|0|1" => "Reverse Eliminator",
             "0|1|0" => "ATS Eliminator",
@@ -58,7 +65,49 @@ class BetSetController < Controller
             headsup_ats = (bet_set.headsup_ats)?1:0
             regular_reverse = (bet_set.regular_reverse)?1:0
             key = "#{survival_pickem}|#{headsup_ats}|#{regular_reverse}"
-            @form_data.game_type.delete(key)
+            form_data.game_type.delete(key)
         end
+        #remove bet types not allowed by the group
+        if not group_id.nil?
+            group = Group[group_id]
+            if not group.survival_allowed
+                form_data.game_type.delete("0|0|0")
+                form_data.game_type.delete("0|0|1")
+                form_data.game_type.delete("0|1|0")
+                form_data.game_type.delete("0|1|1")
+            end
+            if not group.pickem_allowed
+                form_data.game_type.delete("1|0|0")
+                form_data.game_type.delete("1|0|1")
+                form_data.game_type.delete("1|1|0")
+                form_data.game_type.delete("1|1|1")
+            end
+            if not group.headsup_allowed
+                form_data.game_type.delete("0|0|0")
+                form_data.game_type.delete("0|0|1")
+                form_data.game_type.delete("1|0|0")
+                form_data.game_type.delete("1|0|1")
+            end
+            if not group.ats_allowed
+                form_data.game_type.delete("0|1|0")
+                form_data.game_type.delete("0|1|1")
+                form_data.game_type.delete("1|1|0")
+                form_data.game_type.delete("1|1|1")
+            end
+            if not group.regular_allowed
+                form_data.game_type.delete("0|0|1")
+                form_data.game_type.delete("0|1|1")
+                form_data.game_type.delete("1|0|1")
+                form_data.game_type.delete("1|1|1")
+            end
+            if not group.reverse_allowed
+                form_data.game_type.delete("0|0|0")
+                form_data.game_type.delete("0|1|0")
+                form_data.game_type.delete("1|0|0")
+                form_data.game_type.delete("1|1|0")
+            end
+        end
+
+        form_data
     end
 end
