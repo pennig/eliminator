@@ -1,4 +1,4 @@
-#{form_for(@form_data, :method => :post) do |f|
+#{form_for(@form_data, {:method => :post, :class => "form-horizontal", :id => "form-create-bet-set"}) do |f|
     f.input_hidden :group_id
     f.select("Game Type", :game_type, {:size => 1})
     f.submit("Create", {:class => "btn btn-primary"})
@@ -81,10 +81,22 @@ end}
                 break;
             }
         }
-        show_description($("#form_game_types option:selected").val());
-        $("#form_game_types").change(function(event) {
+        show_description($("#form_game_type option:selected").val());
+        $("#form_game_type").change(function(event) {
             var selected = $(this).find("option:selected");
             show_description(selected.val());
+        });
+        $("#form-create-bet-set").submit(function(event) {
+            event.preventDefault();
+            var group_id = $('#form-create-bet-set input[name=group_id]').val();
+            var game_type = $('#form-create-bet-set select[name=game_type]').val();
+            $.post("/bet_set/create",{group_id: group_id, game_type: game_type},function(response) {
+                console.log(response);
+                //need to handle errors here...
+                $("#bet-set-modal").modal("hide");
+                //and do better than just reloading
+                window.location.reload();
+            });
         });
     });
 </script>

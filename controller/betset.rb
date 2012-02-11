@@ -6,7 +6,9 @@ class BetSetController < Controller
     def create(group_id=nil)
         login_required
 
-        if not group_id.nil?
+        if group_id.nil? or group_id == "public"
+            group_id = nil
+        else
             group_id = group_id.to_i
         end
 

@@ -1,12 +1,12 @@
 <div class="row">
     <div class="span2">
         <ul class="nav nav-list">
-            <li class="nav-header">Public <i class="icon-pencil"></i></li>
+            <li class="nav-header">Public <i class="icon-pencil" data-group-id="public"></i></li>
             <?r @bet_sets.where(:group_id => nil).each do |bet_set| ?>
             <li><a href="#{current_week_type}/#{current_week_number}/#{bet_set.id}" class="bet-set">#{bet_set.friendly_name}</a></li>
             <?r end ?>
             <?r user.joined_groups.each do |group| ?>
-            <li class="nav-header">#{group.name} <i class="icon-pencil"></i></li>
+            <li class="nav-header">#{group.name} <i class="icon-pencil" data-group-id="#{group.id}"></i></li>
             <?r @bet_sets.where(:group_id => group.id).each do |bet_set| ?>
             <li><a href="#{current_week_type}/#{current_week_number}/#{bet_set.id}" class="bet-set">#{bet_set.friendly_name}</a></li>
             <?r end ?>
@@ -15,6 +15,14 @@
     </div>
     <div class="span10" id="bet-container">
         #{render_partial :bet_table}
+    </div>
+</div>
+<div class="modal hide fade" id="bet-set-modal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" >&times;</a>
+        <h3>Create Bet Set</h3>
+    </div>
+    <div class="modal-body" id="bet-set-modal-body">
     </div>
 </div>
 <script>
@@ -30,6 +38,15 @@ $(document).ready(function() {
             $("#bet-container").html(response).css("opacity","1");
         });
         return false;
+    });
+    $("i.icon-pencil").click(function() {
+        var group_id = $(this).attr("data-group-id");
+        var modal_body = $("#bet-set-modal-body")
+        modal_body.text("Spinner go here!");
+        $("#bet-set-modal").modal();
+        $.get("/bet_set/create/"+group_id,function(response) {
+            modal_body.html(response);
+        },"html");
     });
 });
 </script>
