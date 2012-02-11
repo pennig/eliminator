@@ -10,6 +10,7 @@ class BetSetController < Controller
             group_id = nil
         else
             group_id = group_id.to_i
+            @group = Group[group_id]
         end
 
         if request.post?

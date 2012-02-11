@@ -1,3 +1,6 @@
+<?r if not @group.nil? ?>
+<h4 style="float:right">Group: #{@group.name}</h4>
+<?r end ?>
 #{form_for(@form_data, {:method => :post, :class => "form-horizontal", :id => "form-create-bet-set"}) do |f|
     f.input_hidden :group_id
     f.select("Game Type", :game_type, {:size => 1})
