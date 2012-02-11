@@ -1,20 +1,51 @@
-<table class="table table-striped">
-<?r
-i = 1
-j = 0
-previous_wins = nil
-@bet_record.each do |player|
-    if previous_wins != player[:won].to_i
-        i = i+j
+<div class="row">
+    <div class="span2">
+        <ul class="nav nav-list">
+            <li class="nav-header">Public</li>
+            <li #{"class=\"active\"" if is_active?("public","survival","h","reg")}><a href="/leaderboard/eliminator/#{@season}/public/h/reg">Eliminator</a></li>
+            <li #{"class=\"active\"" if is_active?("public","survival","h","rev")}><a href="/leaderboard/eliminator/#{@season}/public/h/rev">Reverse Eliminator</a></li>
+            <li #{"class=\"active\"" if is_active?("public","survival","a","reg")}><a href="/leaderboard/eliminator/#{@season}/public/a/reg">ATS Eliminator</a></li>
+            <li #{"class=\"active\"" if is_active?("public","survival","a","rev")}><a href="/leaderboard/eliminator/#{@season}/public/a/rev">Reverse ATS Eliminator</a></li>
+            <li><a href="/leaderboard/pickem/#{@season}/public/h/reg">Pickem</a></li>
+            <li><a href="/leaderboard/pickem/#{@season}/public/h/rev">Reverse Pickem</a></li>
+            <li><a href="/leaderboard/pickem/#{@season}/public/a/reg">ATS Pickem</a></li>
+            <li><a href="/leaderboard/pickem/#{@season}/public/a/rev">Reverse ATS Pickem</a></li>
+            <?r @groups.each do |group| ?>
+            <li class="nav-header">#{group.name}</li>
+            <?r @bet_sets.where(:group_id => group.id).each do |bet_set|
+                url = build_url(bet_set)
+                s_p = (bet_set.survival_pickem)?"pickem":"survival"
+                h_a = (bet_set.headsup_ats)?"a":"h"
+                reg_rev = (bet_set.regular_reverse)?"rev":"reg"
+            ?>
+            <li #{"class=\"active\"" if is_active?(bet_set.group_id,s_p,h_a,reg_rev)}><a href="#{url}">#{bet_set.friendly_name}</a></li>
+            <?r end ?>
+            <?r end unless @groups.nil? ?>
+            <?r if @groups.nil? ?>
+            <li class="nav-header"><a href="/register/login">Log in for groups</a></li>
+            <?r end ?>
+        </ul>
+    </div>
+    <div class="span10">
+        <table class="table table-striped">
+        <?r
+        i = 1
         j = 0
-    end
-    j += 1
-    previous_wins = player[:won].to_i
-?>
-    <tr>
-        <td>#{i}</td>
-        <td>#{player[:username]}</td>
-        <td>#{player[:won].to_i} - #{player[:lost].to_i}</td>
-    </tr>
-<?r end ?>
-</table>
+        previous_wins = nil
+        @bet_record.each do |player|
+            if previous_wins != player[:won].to_i
+                i = i+j
+                j = 0
+            end
+            j += 1
+            previous_wins = player[:won].to_i
+        ?>
+            <tr>
+                <td>#{i}</td>
+                <td>#{player[:username]}</td>
+                <td>#{player[:won].to_i} - #{player[:lost].to_i}</td>
+            </tr>
+        <?r end ?>
+        </table>
+    </div>
+</div>
