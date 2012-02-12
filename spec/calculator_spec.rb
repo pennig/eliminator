@@ -18,11 +18,15 @@ describe Calculator do
         Calculator.calculate("2*cos(0)*2").should == 4
         Calculator.calculate("2+cos(0)*2").should == 4
         Calculator.calculate("(2+cos(0))*2+tan(cos(0.5))*3").round(1).should == 9.6
+        Calculator.calculate("8*log(100,10)+5").should == 21
+        Calculator.calculate("8*sin(0)+5").should == 5
     end
     it "tests functions" do
         Calculator.calculate("sin(0)").should == 0
         Calculator.calculate("cos(0)").should == 1
         Calculator.calculate("tan(0)").should == 0
-        Calculator.calculate("cos(0)*sin(3.1415926535/2)").should == 1
+        Calculator.calculate("cos(0)*sin(3.14159/2)").round(0).should == 1
+        Calculator.calculate("sqrt(16)").should == 4
+        Calculator.calculate("log(100,10)").should == 2
     end
 end

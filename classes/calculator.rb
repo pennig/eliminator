@@ -1,4 +1,3 @@
-
 module Calculator
 
     def Calculator.calculate(expression)
@@ -28,11 +27,12 @@ module Calculator
         'cos' => Operator.new(4, lambda {|a| Math.cos(a)}, :right),
         'tan' => Operator.new(4, lambda {|a| Math.tan(a)}, :right),
         'sqrt' => Operator.new(4, lambda {|a| Math.sqrt(a)}, :right),
+        'log' => Operator.new(4, lambda {|a,b| Math.log(a,b)}, :right),
         '+'   => Operator.new(1, lambda {|a,b| a + b}),
         '-'   => Operator.new(1, lambda {|a,b| a - b})
     }
 
-    Delimiters = ['(', ')'].concat(Operators.keys)
+    Delimiters = ['(', ')', ','].concat(Operators.keys)
     InfixTokenizer = Regexp.new('('+Delimiters.map {|d| Regexp.escape(d)}.join('|')+')')
 
     class RPNCalculator
@@ -71,6 +71,10 @@ module Calculator
                     end
                     operators.pop
 
+                elsif token == ","
+                    until operators.last == "("
+                        expression << operators.pop
+                    end
                 else
                     expression << token
                 end
