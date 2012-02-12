@@ -1,5 +1,5 @@
 class TeamController < Controller
-    def index(season=2011)
+    def index(season=current_season)
         @season = season
         @season_path = build_path
 

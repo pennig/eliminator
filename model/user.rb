@@ -74,6 +74,7 @@ class User
         sql = "select
            b.user_id,
            b.season,
+           bs.group_id,
            sum(case when ((gr.status = 'FINAL') and (gr.winning_team_id = b.team_id) and (b.survival_pickem = 0) and (b.headsup_ats = 0) and (b.regular_reverse = 0)) then 1 else 0 end) AS s_h_reg_won,
            sum(case when ((gr.status = 'FINAL') and ((gr.winning_team_id <> b.team_id) or isnull(gr.winning_team_id)) and (b.survival_pickem = 0) and (b.headsup_ats = 0) and (b.regular_reverse = 0)) then 1 else 0 end) AS s_h_reg_lost,
            sum(case when ((gr.status = 'FINAL') and (gr.winning_team_id is not null) and (gr.winning_team_id <> b.team_id) and (b.survival_pickem = 0) and (b.headsup_ats = 0) and (b.regular_reverse = 1)) then 1 else 0 end) AS s_h_rev_won,
@@ -96,12 +97,13 @@ class User
            sum(case when ((gr.status = 'FINAL') and ((gr.away_score - gr.home_score) = s.spread) and (b.survival_pickem = 1) and (b.headsup_ats = 1) and (b.regular_reverse = 1)) then 1 else 0 end) AS p_a_rev_push
         from bets b
         join game_results gr on gr.game_id = b.game_id
-        join spread s on b.spread_id = s.id
-        where user_id = ?"
+        join bet_sets bs on bs.id = b.bet_set_id
+        left outer join spread s on b.spread_id = s.id
+        where b.user_id = ?"
         if season.nil?
-            sql += " group by season"
+            sql += " group by season, group_id"
         else
-            sql += " and season = ?"
+            sql += " and season = ? group by group_id"
         end
         self.db[sql,self.id,season]
     end

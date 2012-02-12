@@ -14,6 +14,7 @@ class UserController < Controller
             @user = User.where(:username => user_identifier).first
         end
         @bet_record = @user.record
+        @bet_sets = BetSet.where(:user_id => @user.id).all
     end
 
 end
