@@ -20,15 +20,15 @@ module Calculator
     end
 
     Operators = {
-    	'-u'  => Operator.new(9, lambda {|a| -1 * a}, :right),
-    	'^'   => Operator.new(5, lambda {|a,b| a ** b}, :right),
-    	'*'   => Operator.new(4, lambda {|a,b| Float(a) * b}),
-    	'/'   => Operator.new(4, lambda {|a,b| Float(a) / b}),
-    	'sin' => Operator.new(3, lambda {|a| Math.sin(a)}),
-    	'cos' => Operator.new(3, lambda {|a| Math.cos(a)}),
-    	'tan' => Operator.new(3, lambda {|a| Math.tan(a)}),
-    	'+'   => Operator.new(2, lambda {|a,b| a + b}),
-    	'-'   => Operator.new(2, lambda {|a,b| a - b})
+        '-u'  => Operator.new(5, lambda {|a| -1 * a}, :right),
+        '^'   => Operator.new(3, lambda {|a,b| a ** b}, :right),
+        '*'   => Operator.new(2, lambda {|a,b| a * b}),
+        '/'   => Operator.new(2, lambda {|a,b| Float(a) / b}),
+        'sin' => Operator.new(4, lambda {|a| Math.sin(a)}, :right),
+        'cos' => Operator.new(4, lambda {|a| Math.cos(a)}, :right),
+        'tan' => Operator.new(4, lambda {|a| Math.tan(a)}, :right),
+        '+'   => Operator.new(1, lambda {|a,b| a + b}),
+        '-'   => Operator.new(1, lambda {|a,b| a - b})
     }
 
     Delimiters = ['(', ')'].concat(Operators.keys)
@@ -98,5 +98,3 @@ module Calculator
         end
     end
 end
-
-puts Calculator.calculate("-3 + 5 * -5 / (-2 + 4)")
