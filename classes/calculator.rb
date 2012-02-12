@@ -10,13 +10,13 @@ module Calculator
 
     Operator = Struct.new(:precedence, :fn, :associativity)
     class Operator
-      def <(other)
-        if associativity == :right
-          precedence < other.precedence
-        else
-          precedence <= other.precedence
+        def <(other)
+            if associativity == :right
+                precedence < other.precedence
+            else
+                precedence <= other.precedence
+            end
         end
-      end
     end
 
     Operators = {
@@ -27,6 +27,7 @@ module Calculator
         'sin' => Operator.new(4, lambda {|a| Math.sin(a)}, :right),
         'cos' => Operator.new(4, lambda {|a| Math.cos(a)}, :right),
         'tan' => Operator.new(4, lambda {|a| Math.tan(a)}, :right),
+        'sqrt' => Operator.new(4, lambda {|a| Math.sqrt(a)}, :right),
         '+'   => Operator.new(1, lambda {|a,b| a + b}),
         '-'   => Operator.new(1, lambda {|a,b| a - b})
     }
