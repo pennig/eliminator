@@ -13,7 +13,7 @@ module Calculator
       def <(other)
         if associativity == :right
           precedence < other.precedence
-        else 
+        else
           precedence <= other.precedence
         end
       end
@@ -47,29 +47,29 @@ module Calculator
             until tokens.empty?
                 last_token = token
                 token = tokens.shift
-            
+
                 if Operators[token]
-            
+
                     #handle unary negation
                     if token == '-' && (last_token.nil? || last_token == '(' || Operators[last_token])
                         token = '-u'
                     end
-            
+
                     op = operators.last
                     if Operators[op] && Operators[token] < Operators[op]
                         expression << operators.pop
                     end
                     operators << token
-                
+
                 elsif token == "("
                     operators << token
-                
+
                 elsif token == ")"
                     until operators.last == "("
                         expression << operators.pop
                     end
                     operators.pop
-            
+
                 else
                     expression << token
                 end
@@ -98,5 +98,3 @@ module Calculator
         end
     end
 end
-
-puts Calculator.calculate("-3 + 5 * -5 / (-2 + 4)")
