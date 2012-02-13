@@ -16,20 +16,23 @@ module Calculator
                 precedence <= other.precedence
             end
         end
+        def fn?
+            precedence == :fn
+        end
     end
 
     Operators = {
-        '-u'  => Operator.new(5, lambda {|a| -1 * a}, :right),
-        '^'   => Operator.new(3, lambda {|a,b| a ** b}, :right),
-        '*'   => Operator.new(2, lambda {|a,b| a * b}),
-        '/'   => Operator.new(2, lambda {|a,b| Float(a) / b}),
-        'sin' => Operator.new(4, lambda {|a| Math.sin(a)}, :right),
-        'cos' => Operator.new(4, lambda {|a| Math.cos(a)}, :right),
-        'tan' => Operator.new(4, lambda {|a| Math.tan(a)}, :right),
-        'sqrt' => Operator.new(4, lambda {|a| Math.sqrt(a)}, :right),
-        'log' => Operator.new(4, lambda {|a,b| Math.log(a,b)}, :right),
-        '+'   => Operator.new(1, lambda {|a,b| a + b}),
-        '-'   => Operator.new(1, lambda {|a,b| a - b})
+        '-u'   => Operator.new(5,   lambda {|a| -1 * a}, :right),
+        '^'    => Operator.new(3,   lambda {|a,b| a ** b}, :right),
+        '*'    => Operator.new(2,   lambda {|a,b| a * b}),
+        '/'    => Operator.new(2,   lambda {|a,b| Float(a) / b}),
+        'sin'  => Operator.new(:fn, lambda {|a| Math.sin(a)}),
+        'cos'  => Operator.new(:fn, lambda {|a| Math.cos(a)}),
+        'tan'  => Operator.new(:fn, lambda {|a| Math.tan(a)}),
+        'sqrt' => Operator.new(:fn, lambda {|a| Math.sqrt(a)}),
+        'log'  => Operator.new(:fn, lambda {|a,b| Math.log(a,b)}),
+        '+'    => Operator.new(1,   lambda {|a,b| a + b}),
+        '-'    => Operator.new(1,   lambda {|a,b| a - b})
     }
 
     Delimiters = ['(', ')', ','].concat(Operators.keys)
@@ -56,8 +59,10 @@ module Calculator
                         token = '-u'
                     end
 
-                    op = operators.last
-                    if Operators[op] && Operators[token] < Operators[op]
+                    op = Operators[token]
+                    op2 = Operators[operators.last]
+
+                    if !op.fn? && op2 && op < op2
                         expression << operators.pop
                     end
                     operators << token
@@ -69,7 +74,12 @@ module Calculator
                     until operators.last == "("
                         expression << operators.pop
                     end
+
                     operators.pop
+                    
+                    if (operators.last && Operators[operators.last].fn?)
+                        expression << operators.pop
+                    end
 
                 elsif token == ","
                     until operators.last == "("
